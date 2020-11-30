@@ -16,7 +16,7 @@ entries:
       title: index-checkpoint
       url: index-checkpoint.html
     - output: web,pdf
-      title: module name here
+      title: flowsy
       url: core.html
     output: web
     title: flowsy
