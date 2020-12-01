@@ -1,8 +1,6 @@
 {
   "flowsy": {
     "Overview": "/",
-    "core-checkpoint": "core-checkpoint.html",
-    "index-checkpoint": "index-checkpoint.html",
     "flowsy": "core.html"
   }
 }

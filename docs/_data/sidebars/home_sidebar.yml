@@ -10,12 +10,6 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: core-checkpoint
-      url: core-checkpoint.html
-    - output: web,pdf
-      title: index-checkpoint
-      url: index-checkpoint.html
-    - output: web,pdf
       title: flowsy
       url: core.html
     output: web
