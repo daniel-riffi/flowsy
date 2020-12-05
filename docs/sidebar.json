@@ -1,6 +1,8 @@
 {
   "flowsy": {
     "Overview": "/",
-    "flowsy": "core.html"
+    "Core": "core.html",
+    "Train": "train.html",
+    "Pre": "pre.html"
   }
 }

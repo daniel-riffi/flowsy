@@ -10,8 +10,14 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: flowsy
+      title: Core
       url: core.html
+    - output: web,pdf
+      title: Train
+      url: train.html
+    - output: web,pdf
+      title: Pre
+      url: pre.html
     output: web
     title: flowsy
   output: web

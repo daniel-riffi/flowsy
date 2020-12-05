@@ -6,8 +6,8 @@ title: Welcome to flowsy
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "A simple way to get recommendations."
-description: "A simple way to get recommendations."
+summary: "A simple way to get track recommendations for any playlist in the **Spotify Million Playlist Dataset**."
+description: "A simple way to get track recommendations for any playlist in the **Spotify Million Playlist Dataset**."
 nb_path: "index.ipynb"
 ---
 <!--
@@ -29,42 +29,9 @@ nb_path: "index.ipynb"
 </div>
     {% endraw %}
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
-<span class="o">%</span><span class="k">autoreload</span> 2
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>The autoreload extension is already loaded. To reload it, use:
-  %reload_ext autoreload
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>This file will become your README and also the index of your documentation.</p>
+<p><strong>IMPORTANT :</strong> You can <strong>not</strong> use flowsy to get recommendations for your individual playlist. Instead, it can be used to get recommendations for playlists that are in the <strong>Spotify Million Playlist Dataset</strong>. That's why you will need to download the dataset (or only part of it) in order to work with this library!</p>
 
 </div>
 </div>
@@ -90,7 +57,14 @@ nb_path: "index.ipynb"
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>If you want to say hello to someone you can use this method</p>
+<p>Let's start of by converting the dataset into a proper format by using the <strong>pre</strong> module.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The converted <strong>Pandas Dataframe</strong> will not only be saved to <strong>path_save</strong>, but also returned, so you can do some further work instantly.</p>
 
 </div>
 </div>
@@ -102,7 +76,210 @@ nb_path: "index.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">say_hello</span><span class="p">(</span><span class="s2">&quot;Daniel&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">path_base</span> <span class="o">=</span> <span class="s1">&#39;D:\...\...\spotify_million_playlist_dataset\data&#39;</span>
+<span class="n">path_save</span> <span class="o">=</span> <span class="s1">&#39;D:\...\...&#39;</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_tracks</span> <span class="o">=</span> <span class="n">convert_playlists_x_tracks</span><span class="p">(</span><span class="n">path_base</span><span class="p">,</span> <span class="n">path_save</span><span class="p">,</span> <span class="n">n_playlists</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In order to get recommendations later on, you will need another model, so you will also need another dataframe to train on.</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_artists</span> <span class="o">=</span> <span class="n">convert_playlists_x_artists</span><span class="p">(</span><span class="n">path_base</span><span class="p">,</span> <span class="n">path_save</span><span class="p">,</span> <span class="n">n_playlists</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now you can use the <strong>train</strong> module to train your models.</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">playlist_learner</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="n">dataframe</span><span class="o">=</span><span class="n">df_tracks</span><span class="p">,</span> <span class="n">item_name</span><span class="o">=</span><span class="s1">&#39;track_uri&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: left;">
+      <th>epoch</th>
+      <th>train_loss</th>
+      <th>valid_loss</th>
+      <th>time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0.006255</td>
+      <td>0.006049</td>
+      <td>00:20</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">artist_learner</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="n">dataframe</span><span class="o">=</span><span class="n">df_artists</span><span class="p">,</span> <span class="n">item_name</span><span class="o">=</span><span class="s1">&#39;artist_uri&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: left;">
+      <th>epoch</th>
+      <th>train_loss</th>
+      <th>valid_loss</th>
+      <th>time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0.003167</td>
+      <td>0.003156</td>
+      <td>00:10</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If you have successfully trained your models, you can now use the <strong>core</strong> module of flowsy in order to get recommendations!</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>First of all, we need to create an instance of the <strong>Recommender</strong> class:</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rec</span> <span class="o">=</span> <span class="n">Recommender</span><span class="p">(</span><span class="n">p_learn</span><span class="o">=</span><span class="n">playlist_learner</span><span class="p">,</span> <span class="n">a_learn</span><span class="o">=</span><span class="n">artist_learner</span><span class="p">,</span> <span class="n">playlists</span><span class="o">=</span><span class="n">df_tracks</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Then you can use the <strong>recommend</strong> method to get recommendations to any playlist that your model has been trained on:</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rankings</span> <span class="o">=</span> <span class="n">rec</span><span class="o">.</span><span class="n">recommend</span><span class="p">(</span><span class="n">pid</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+<span class="n">rankings</span>
 </pre></div>
 
     </div>
@@ -117,7 +294,1007 @@ nb_path: "index.ipynb"
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&#39;Hello Daniel!&#39;</pre>
+<pre>[&#39;spotify:track:665Jxlgi1HamPKbW1vwzx4&#39;,
+ &#39;spotify:track:3m1RVYdn4DAyLdnDMCvS4Q&#39;,
+ &#39;spotify:track:3zByVQLvdXUaDTubfWkpCk&#39;,
+ &#39;spotify:track:2dAzuxEnwjHmYN1K5bAZDC&#39;,
+ &#39;spotify:track:54b8qPFqYqIndfdxiLApea&#39;,
+ &#39;spotify:track:7vRriwrloYVaoAe3a9wJHe&#39;,
+ &#39;spotify:track:0eidOawKujRH6fNpqHpCMu&#39;,
+ &#39;spotify:track:0p1BcEcYVO3uk4KDf3gzkY&#39;,
+ &#39;spotify:track:45eF0AQGCTgkUJ3FoIYrbe&#39;,
+ &#39;spotify:track:6iD3tf5OLLlK3ertp8XENc&#39;,
+ &#39;spotify:track:0U9TKK9GYryei6Vn45TEdH&#39;,
+ &#39;spotify:track:0qt5f5EL92o8Snzopsv0en&#39;,
+ &#39;spotify:track:2Nz6aF1umHh5Et6I5H581L&#39;,
+ &#39;spotify:track:7lJbTVbDEMa3w7NFamrwdq&#39;,
+ &#39;spotify:track:7p2aGxnxFYf6VLQPEYirPO&#39;,
+ &#39;spotify:track:4sscDOZCkbLSlDqcCgUJnX&#39;,
+ &#39;spotify:track:73q3FpQVXWk5eSUnyo83E4&#39;,
+ &#39;spotify:track:0iTpQYzJnYgh7kIxyq8A2O&#39;,
+ &#39;spotify:track:3Izr0NYJm5Hp4hwCgtZbDJ&#39;,
+ &#39;spotify:track:5MoYcbJbvZBgL82kYGY9yh&#39;,
+ &#39;spotify:track:02B7Gcfc6lXcuDnoZZZjhE&#39;,
+ &#39;spotify:track:25tjqTcyrBqt6IHAbUJCYW&#39;,
+ &#39;spotify:track:6XuwiHxoUmeL8CXkF82TI1&#39;,
+ &#39;spotify:track:78RbGe8Jtv55s1g6lh08uA&#39;,
+ &#39;spotify:track:3G2xKMcrJAjaeKx7qwHcxe&#39;,
+ &#39;spotify:track:6F4jYuSqnh9btApLxYr8kJ&#39;,
+ &#39;spotify:track:2W5n1X9ZIJEXCdVAwcvlAr&#39;,
+ &#39;spotify:track:06b3VaFsqYqbvQj1zFV5KM&#39;,
+ &#39;spotify:track:5Fm0370X5xpSsDy2AL0Zra&#39;,
+ &#39;spotify:track:6yrzVz6WjF4Whhj1dxIdAk&#39;,
+ &#39;spotify:track:0jHRla4jXwIi7ZcdaIj5o8&#39;,
+ &#39;spotify:track:5sp9fsQwYIXweVTxI7dRmM&#39;,
+ &#39;spotify:track:7nWC1XQv8bRMpVYuh5Bexj&#39;,
+ &#39;spotify:track:6dHrWj35HXTGvlCasE5VAA&#39;,
+ &#39;spotify:track:7Ewumzq8MHlC6OwNhBybGl&#39;,
+ &#39;spotify:track:5GCrBPWKpgH4H3bLLnvWm7&#39;,
+ &#39;spotify:track:5O06nbk5wDRr1WR3Tyo0Af&#39;,
+ &#39;spotify:track:30OHypsTSIxl3NoxakZtbx&#39;,
+ &#39;spotify:track:60lwJa695S26FsYbhCVFVa&#39;,
+ &#39;spotify:track:0IG0bhR18uNnfSa6nS0r0h&#39;,
+ &#39;spotify:track:2BpFudymbytL7gSQZNX83W&#39;,
+ &#39;spotify:track:6Mx7qe3gspQ8OKV3ULfiA0&#39;,
+ &#39;spotify:track:4MUNZkVe0VfomuSgY1EJun&#39;,
+ &#39;spotify:track:5pvVAwQbuFoR7LkcicrKnk&#39;,
+ &#39;spotify:track:2LZwKxTPZLBCYjUhlogMZl&#39;,
+ &#39;spotify:track:0hHdI7G32eAqxUbqRmltQp&#39;,
+ &#39;spotify:track:3WRQUvzRvBDr4AxMWhXc5E&#39;,
+ &#39;spotify:track:2P7O90JwqbBlsJI26miqNa&#39;,
+ &#39;spotify:track:0vYIpioP94c4gwxOyopklE&#39;,
+ &#39;spotify:track:1UAQHOnuhuGpF2iBCMXnTu&#39;,
+ &#39;spotify:track:4Ft7PYNG9LYzDWNeKqdkdz&#39;,
+ &#39;spotify:track:3E2Zh20GDCR9B1EYjfXWyv&#39;,
+ &#39;spotify:track:5ffwgrvw4tVlhFcI8efviN&#39;,
+ &#39;spotify:track:0iqvAEJMHQYUHGL9VLDQv8&#39;,
+ &#39;spotify:track:5nic9nCCfm5OP9KLrlejCd&#39;,
+ &#39;spotify:track:5MXTJktozOCF1KInWzVH5B&#39;,
+ &#39;spotify:track:7i082IMKU0FWcA7GzZtCzZ&#39;,
+ &#39;spotify:track:18pjREva50ELsn8QKviHvU&#39;,
+ &#39;spotify:track:0t6VDQI1X5KtfO0X3mcPlj&#39;,
+ &#39;spotify:track:3e9LhXat03hFvmS7YegDjd&#39;,
+ &#39;spotify:track:1bdSt7626m8iEOyPR33Up9&#39;,
+ &#39;spotify:track:49yo9G16eljLYk0ruT0jMf&#39;,
+ &#39;spotify:track:4VySpxhRGy32u5zPCprzDn&#39;,
+ &#39;spotify:track:6DZMD3ksHu5JutUzlHZtYY&#39;,
+ &#39;spotify:track:6p6xjPPAOpzmXCR4dfJJSj&#39;,
+ &#39;spotify:track:0udUoySNjmgtQc5OIwHHxn&#39;,
+ &#39;spotify:track:1bl3MTHuXMweBGdeuHUl3V&#39;,
+ &#39;spotify:track:36uzr8rOU8YKbbIkoe1DD7&#39;,
+ &#39;spotify:track:6KCiwJ61w9rsDOg5t1RRsQ&#39;,
+ &#39;spotify:track:3BkLpheTPPxLrAvi0dHId8&#39;,
+ &#39;spotify:track:0lFrqu4LpZDtjfiOdASyu1&#39;,
+ &#39;spotify:track:2GHNZvjA57wLRl4FVk0MhS&#39;,
+ &#39;spotify:track:7kksuEjvommE2D7QJvyJma&#39;,
+ &#39;spotify:track:70jtjJHtVBPuxllGPCWxnX&#39;,
+ &#39;spotify:track:0OwhEqx9AoECkHrHjE7phU&#39;,
+ &#39;spotify:track:5Du9saCXYuRkHcj3CA6Her&#39;,
+ &#39;spotify:track:0Po9oxXGsDXDnfNngwR28c&#39;,
+ &#39;spotify:track:71dRXDFvEPYv8iRh8qxc7a&#39;,
+ &#39;spotify:track:3nSvgsmfyfsY5nhZFJ75ms&#39;,
+ &#39;spotify:track:6owsExK6Rz6pX0VFtQDznp&#39;,
+ &#39;spotify:track:0yNwiO2VD2vakcfHZ1NI33&#39;,
+ &#39;spotify:track:2Arw3BvOzm5ljO3IpYX28D&#39;,
+ &#39;spotify:track:6VY8zV9nGLRIVaM5G3sKpw&#39;,
+ &#39;spotify:track:4rXFmHYKsoJc7vcpc90llL&#39;,
+ &#39;spotify:track:10McjLEshIntz70hO2Jz50&#39;,
+ &#39;spotify:track:3XRPkOVq4vGS7g9CRQwzVC&#39;,
+ &#39;spotify:track:32OlwWuMpZ6b0aN2RZOeMS&#39;,
+ &#39;spotify:track:6buKmjgqX7MruMP8nruBbJ&#39;,
+ &#39;spotify:track:5JkCyeCL0S3UqzlibpeDdb&#39;,
+ &#39;spotify:track:77GZxme1GMNbbooEH8nHNX&#39;,
+ &#39;spotify:track:1onytNPylVczmCf0IW4Jv6&#39;,
+ &#39;spotify:track:4ZUIfD1hkwOjHtBd2iLA3u&#39;,
+ &#39;spotify:track:38hoUe0bZq5OYdixN0Ozki&#39;,
+ &#39;spotify:track:3C57ewlHARCVqeH3KiYkma&#39;,
+ &#39;spotify:track:62U57s3x5TN6Awljt07i8D&#39;,
+ &#39;spotify:track:6RcQOut9fWL6FSqeIr5M1r&#39;,
+ &#39;spotify:track:4Yf5bqU3NK4kNOypcrLYwU&#39;,
+ &#39;spotify:track:5eFxwmqKrHpSQDOEIFYlgY&#39;,
+ &#39;spotify:track:1b7vg5T9YKR3NNqXfBYRF7&#39;,
+ &#39;spotify:track:0arNrzPygksLY2pEbRgBjw&#39;,
+ &#39;spotify:track:6GIrIt2M39wEGwjCQjGChX&#39;,
+ &#39;spotify:track:1UkMAtLU8NxsddE7j4zXGO&#39;,
+ &#39;spotify:track:49qmdPALsDMBHR1MfqIfOy&#39;,
+ &#39;spotify:track:40bm28QcJT5My540ymSQ2y&#39;,
+ &#39;spotify:track:305WCRhhS10XUcH6AEwZk6&#39;,
+ &#39;spotify:track:5oQcOu1omDykbIPSdSQQNJ&#39;,
+ &#39;spotify:track:1zusIxNqJu8i4g6P6hJ2Qa&#39;,
+ &#39;spotify:track:3JxefpUPB9vmI2ZO5MMYZA&#39;,
+ &#39;spotify:track:1TfqLAPs4K3s2rJMoCokcS&#39;,
+ &#39;spotify:track:7w87IxuO7BDcJ3YUqCyMTT&#39;,
+ &#39;spotify:track:6LTaVrJRoFtSw2xFBpARs3&#39;,
+ &#39;spotify:track:0jqK7sGTLsHPkQrrcrGuKD&#39;,
+ &#39;spotify:track:6ndmKwWqMozN2tcZqzCX4K&#39;,
+ &#39;spotify:track:6m59VvDUi0UQsB2eZ9wVbH&#39;,
+ &#39;spotify:track:0pSBuHjILhNEo55xK1zrRt&#39;,
+ &#39;spotify:track:3Nl6eD5Jz6TLESdBx1Mpjo&#39;,
+ &#39;spotify:track:3lO38SiB2WAQRqTAHN7WTC&#39;,
+ &#39;spotify:track:6f3Kn4QtwZPU2IvwwDSbLF&#39;,
+ &#39;spotify:track:085JBuPwP0YbPgc2t6Lscc&#39;,
+ &#39;spotify:track:7jDOx9VTvxq0S9z8RjQ7lv&#39;,
+ &#39;spotify:track:4F1GNyFyinJH9W50pJO0RR&#39;,
+ &#39;spotify:track:48EPGcauDd6riOMLxEPM3I&#39;,
+ &#39;spotify:track:0xfdG2n1zrephk64xqQC1q&#39;,
+ &#39;spotify:track:5Ev3sAE6AN0baPJKe3vcy1&#39;,
+ &#39;spotify:track:64AFKcZzIq3cMVpAPM9DYB&#39;,
+ &#39;spotify:track:3b0BEtQ7qAWGJ1ueivzuAU&#39;,
+ &#39;spotify:track:3SEYycG24ujPRnGad41w2E&#39;,
+ &#39;spotify:track:7EYWVZwt5x3N9lAUBLFwr2&#39;,
+ &#39;spotify:track:1BPPnDSpYfVGx1fYWyAWvz&#39;,
+ &#39;spotify:track:0au5u99zsQ6yunHfywDX8a&#39;,
+ &#39;spotify:track:5QSYWruQQ7kBCHScI4xJ9g&#39;,
+ &#39;spotify:track:04CpKcl1ItOezCVVkIL3E4&#39;,
+ &#39;spotify:track:7nnIbg5MvyIceuuRzwFZjk&#39;,
+ &#39;spotify:track:6Vhe8Hg51pzixWnsX4X86z&#39;,
+ &#39;spotify:track:4G3lJ7BTMugaj5Sqp7fnGs&#39;,
+ &#39;spotify:track:2wMBKl2M7X20iHrbDcDp4D&#39;,
+ &#39;spotify:track:2vNY0WQo5xtwQPYnuPlwEB&#39;,
+ &#39;spotify:track:4u5OD6BQNt2hztXYZINZNS&#39;,
+ &#39;spotify:track:1FneiT4MnWCOIDHUZkZsoO&#39;,
+ &#39;spotify:track:2stnUIKHtPrG5Hde3wqQc2&#39;,
+ &#39;spotify:track:068FF1fJiNCyeYkQvDTntw&#39;,
+ &#39;spotify:track:321jLsfufuG8Ot8GsYffdm&#39;,
+ &#39;spotify:track:345RHjiEdIVedsxtiwGG7t&#39;,
+ &#39;spotify:track:6mUjZMRxxE4kYnYnXrdYm4&#39;,
+ &#39;spotify:track:1nftNKx6O4GhgImhTyTs6B&#39;,
+ &#39;spotify:track:68TUAeelb7c3wzfMNPOjmG&#39;,
+ &#39;spotify:track:5y8qfDDccV2kEn4roGPter&#39;,
+ &#39;spotify:track:2CKuXVftZK7fRpUsrFvY91&#39;,
+ &#39;spotify:track:66fjBB43iramIyjHulpkMN&#39;,
+ &#39;spotify:track:1oj4KLsbYhvfHFnhdb3twP&#39;,
+ &#39;spotify:track:35ihWLSURZaIbJA1iLJgAP&#39;,
+ &#39;spotify:track:1DdYWvSA2lJbYqzpm3moC6&#39;,
+ &#39;spotify:track:6QbbxQtijqLfUV90Vlm1Xh&#39;,
+ &#39;spotify:track:6sio3UGjtYpYgg9Ez3Q6os&#39;,
+ &#39;spotify:track:5t0izTLPeWYLiIfHPJbORJ&#39;,
+ &#39;spotify:track:0i3QayolUcd7kAm5AyRp19&#39;,
+ &#39;spotify:track:37sWianweYMt42ZoSABn6y&#39;,
+ &#39;spotify:track:6v4zAuJTlszNdKrbbnEFu8&#39;,
+ &#39;spotify:track:04FwOgIovwG5ItELDLfPfj&#39;,
+ &#39;spotify:track:3BGbqEDio3ocx1v4egIYr6&#39;,
+ &#39;spotify:track:5RtIFveFctGcvO1J9wVStV&#39;,
+ &#39;spotify:track:5CLnJjfZjXigfPk8iKEPBE&#39;,
+ &#39;spotify:track:4SKlwyLMGQdzul5S5TvCh5&#39;,
+ &#39;spotify:track:33iv3wnGMrrDugd7GBso1z&#39;,
+ &#39;spotify:track:5hcer4MP5GeHqtSjDYx5AC&#39;,
+ &#39;spotify:track:2hdhm6piUJnmKXmEmskXCg&#39;,
+ &#39;spotify:track:05wIrZSwuaVWhcv5FfqeH0&#39;,
+ &#39;spotify:track:3rfDfPjgHDQ1BUaSHr9xoI&#39;,
+ &#39;spotify:track:2FfZg072w8RoxlMOR7M4CT&#39;,
+ &#39;spotify:track:1Jaah2tmN9Hv81A87KZ1MU&#39;,
+ &#39;spotify:track:2HF2D2b2m66EK6fwGcHIor&#39;,
+ &#39;spotify:track:3Z9PJ6xiEGmcqo2hESEB5n&#39;,
+ &#39;spotify:track:2skmOCFU64Bg7Ytkgwliwe&#39;,
+ &#39;spotify:track:3cfOd4CMv2snFaKAnMdnvK&#39;,
+ &#39;spotify:track:2sxEZAXXUG0eTFZpsCDKR6&#39;,
+ &#39;spotify:track:2M9ro2krNb7nr7HSprkEgo&#39;,
+ &#39;spotify:track:4bJ7tMJqfYmkKgCYzaaG4B&#39;,
+ &#39;spotify:track:6S0IRhCK4P0llKnIjivfGd&#39;,
+ &#39;spotify:track:2VvfTbJWcguP88dvnpH7hl&#39;,
+ &#39;spotify:track:6y6TLb3rwDRxP5I3qK0Py9&#39;,
+ &#39;spotify:track:6ZQgLj68uDyiNdeuIsLkjq&#39;,
+ &#39;spotify:track:0za4yuB3UmITV2L9QMwlV0&#39;,
+ &#39;spotify:track:4bhoQCNYx5TjINvtSMiaAb&#39;,
+ &#39;spotify:track:3OIKgKNUt87GHz8OmmHZop&#39;,
+ &#39;spotify:track:5UaReL5xWZIGLs5VBqouq9&#39;,
+ &#39;spotify:track:42RxuQMiI908vPbh3djeOm&#39;,
+ &#39;spotify:track:6Etu0fN4yllmZ5oTxKd0pt&#39;,
+ &#39;spotify:track:3DgEeHFWREJ0TK3RiPjWwQ&#39;,
+ &#39;spotify:track:3EEzQDCP8jRl2pEt9eDKMO&#39;,
+ &#39;spotify:track:5QS9GYw1lZtIIlfnCqNvgX&#39;,
+ &#39;spotify:track:1YI4b8Wy9CdGiacUy54RIQ&#39;,
+ &#39;spotify:track:0ZZ9kLRomzTbnmtzcE1dO2&#39;,
+ &#39;spotify:track:4yfEK7mOkvUwTrvKCeyOTf&#39;,
+ &#39;spotify:track:14Nn7fmweYvSJ7SnDIsfEH&#39;,
+ &#39;spotify:track:7tUUZ74ZhKN8B1IiMREYlO&#39;,
+ &#39;spotify:track:53H0Xxf7BhAmbSprGkJL5m&#39;,
+ &#39;spotify:track:0tJCX9QKpIr9YPZzRuXWOe&#39;,
+ &#39;spotify:track:1qyRvPjbQZbPPwVGtApQ7P&#39;,
+ &#39;spotify:track:2TcWNtN8aiBHAS4DWVvpPb&#39;,
+ &#39;spotify:track:6pvlXRo37T9hps7z5dEp0U&#39;,
+ &#39;spotify:track:5iXuX70Sxp6sKdumBcQQW7&#39;,
+ &#39;spotify:track:4fkAWGCbxNizyNwsHlrajH&#39;,
+ &#39;spotify:track:6JH2Z9YixSoQTgIoxx4w3P&#39;,
+ &#39;spotify:track:2rs0JKFm7CjovNlfYI62cv&#39;,
+ &#39;spotify:track:3YQacpdl0a7j1KbKDEUcYh&#39;,
+ &#39;spotify:track:5T4j3Uv33fQO7tsR2lMl4y&#39;,
+ &#39;spotify:track:4bJbSERtCqK9D6DRUPMmMh&#39;,
+ &#39;spotify:track:1SHjeFXej7qNXpHFAuv9zL&#39;,
+ &#39;spotify:track:57MbOuT7s2ES3IW9KuZQzI&#39;,
+ &#39;spotify:track:1Yw6ViCo3tuufI0Hg4mzSU&#39;,
+ &#39;spotify:track:4ztR83ZgTdg8H9xypnsQfS&#39;,
+ &#39;spotify:track:5nt7eRlOOJhrsBSrHWiY4I&#39;,
+ &#39;spotify:track:4ewYje7A0JyY6GXpenAk4z&#39;,
+ &#39;spotify:track:42qRkSY47AqYbOV9OqPyV2&#39;,
+ &#39;spotify:track:1i8FJaKwn3OjZCqGMUnoKG&#39;,
+ &#39;spotify:track:4bYqnqT92z9bi50a2tRsjj&#39;,
+ &#39;spotify:track:6qbZpR7vyyU5EDJ0a8dX8k&#39;,
+ &#39;spotify:track:26nKLWXp4l91qxdrOlCEP9&#39;,
+ &#39;spotify:track:4y6oj1cDAyFRlZdqLkOrOr&#39;,
+ &#39;spotify:track:74CRWolE5ys9xf30JTI3H2&#39;,
+ &#39;spotify:track:1pXAZZbOzEjsg4h3aOo5iD&#39;,
+ &#39;spotify:track:6TzfRFDXjpI5IeKfWC9NTU&#39;,
+ &#39;spotify:track:4SZM1j8TEdxdFNWnBdV52x&#39;,
+ &#39;spotify:track:5DEdP7MrcgdjXWGHWAeK5I&#39;,
+ &#39;spotify:track:36Q7Lexy7r0g8W7gz5o5p7&#39;,
+ &#39;spotify:track:4bDHr5yOmdI2nmbWvBpPS2&#39;,
+ &#39;spotify:track:5YzckYO7G171MHg1UqkxJY&#39;,
+ &#39;spotify:track:5clz8BOBulxx7q2yHxqOCk&#39;,
+ &#39;spotify:track:5DJb6A4bRgCAMaikSEzdJH&#39;,
+ &#39;spotify:track:0Puj4YlTm6xNzDDADXHMI9&#39;,
+ &#39;spotify:track:3JtdmGmWOoZ4j37gj9Uzmp&#39;,
+ &#39;spotify:track:41X9To0bQ4fpoSRri4NHiI&#39;,
+ &#39;spotify:track:4dTVgHZFPlaq9nPbLVVLSG&#39;,
+ &#39;spotify:track:5Gt1nWO7EVk5oW5cagcqbS&#39;,
+ &#39;spotify:track:32I9MdnqhFLCnAwA2wUnTz&#39;,
+ &#39;spotify:track:0xOeB16JDbBJBJKSdHbElT&#39;,
+ &#39;spotify:track:6ptsvwWMeB1r9VrKY3j4YM&#39;,
+ &#39;spotify:track:4tPFEWRuNQhibDQSGB2PVE&#39;,
+ &#39;spotify:track:68rdZO4AcPakdi2zaS7kPI&#39;,
+ &#39;spotify:track:1Co1RNm1i1RL9v1VeShNO3&#39;,
+ &#39;spotify:track:2S6yBUXa5KddBV0CqBkcP1&#39;,
+ &#39;spotify:track:6nxHMqTNKWlQnx5AFxz1iX&#39;,
+ &#39;spotify:track:5PYbfWPUpAYf6tMBXhLM5u&#39;,
+ &#39;spotify:track:6CryGd6wVcpWf5J5qH7cvZ&#39;,
+ &#39;spotify:track:6egzrRrypKd9iitBMt2Uwq&#39;,
+ &#39;spotify:track:3glqlA5qY3bbo8UaUDGPnw&#39;,
+ &#39;spotify:track:7MHRGUwn2J9TyRFOGFOX40&#39;,
+ &#39;spotify:track:5aDcKVJ7YTgAxyT27S0YVb&#39;,
+ &#39;spotify:track:7jWIolCo1nHYaAmOvFH0Lo&#39;,
+ &#39;spotify:track:2K6Zk9lKbzAGjjfZbg59Ia&#39;,
+ &#39;spotify:track:24FmdHoCr2jZGE6Z6dZbJT&#39;,
+ &#39;spotify:track:0PyxraBvpi88QA4qiX2K5j&#39;,
+ &#39;spotify:track:0GjQ1BRniIHyRJ8ATfpCBx&#39;,
+ &#39;spotify:track:4WIlSfQq77VOALZIcXtyQ9&#39;,
+ &#39;spotify:track:1JO1xLtVc8mWhIoE3YaCL0&#39;,
+ &#39;spotify:track:1YT65r02sCsJboh4yb2s8X&#39;,
+ &#39;spotify:track:2DvonT751gQIRikzKDDGId&#39;,
+ &#39;spotify:track:4BAWCedKFfdwxPFmFv4DMG&#39;,
+ &#39;spotify:track:44p8HtTtPp81ESuZP1aix5&#39;,
+ &#39;spotify:track:5CI2tcJMXXl4BinAk3DI1K&#39;,
+ &#39;spotify:track:16PiUy0P2mmJroyHbuGCXB&#39;,
+ &#39;spotify:track:3FECBXr4grUJ57bVWvV7b7&#39;,
+ &#39;spotify:track:6clYXXfpfNZ8MGcBSYr64b&#39;,
+ &#39;spotify:track:6FJfXr849kkY4K5fgAKg4R&#39;,
+ &#39;spotify:track:066nVSMAHBa3UxtE1m4c2j&#39;,
+ &#39;spotify:track:7IEcPKS3Fkd9DgajXPpbSY&#39;,
+ &#39;spotify:track:6AusPFTFwk5iuqF3ekn7gu&#39;,
+ &#39;spotify:track:7w0chcuNV2QYryLRRXSuyh&#39;,
+ &#39;spotify:track:1qP7GQv65XvQBQoKMadJ64&#39;,
+ &#39;spotify:track:54QsQ3wVu3BevTQm7udOmF&#39;,
+ &#39;spotify:track:6TlRNJaezOdzdECnQeRuMM&#39;,
+ &#39;spotify:track:4v6jydWBTAIqnyPVNyOAdc&#39;,
+ &#39;spotify:track:7KgneETGBycWbmIfK2fagH&#39;,
+ &#39;spotify:track:0FnscCdhOOin94zzmifJ3L&#39;,
+ &#39;spotify:track:2WDlSgb4q9ETwyZEBUFM8s&#39;,
+ &#39;spotify:track:4riiAdWWB9qw9cJkfSWQfe&#39;,
+ &#39;spotify:track:18sytW2s53Of6NVudQyUlH&#39;,
+ &#39;spotify:track:1OK4hVcucqYKMU9Ipb3dtx&#39;,
+ &#39;spotify:track:24lF0of2nbQlTYDU8i6glX&#39;,
+ &#39;spotify:track:0KgbwF3wEBvPWPwwTLo9iR&#39;,
+ &#39;spotify:track:1Ktsil4bC4hYRWlqMG4qK3&#39;,
+ &#39;spotify:track:0ks5sXa1iEMvtVbYOsfiNq&#39;,
+ &#39;spotify:track:3h5IJ0EzVpkiaoL174GC3M&#39;,
+ &#39;spotify:track:7f0jXNMu2xjQUtmKMuWhGA&#39;,
+ &#39;spotify:track:4htbAEZWr53J08x3dUv00W&#39;,
+ &#39;spotify:track:4HE7hVjthyaSQekgDrLSRj&#39;,
+ &#39;spotify:track:3kJXrEVUCdPQ3e4e5k9OHC&#39;,
+ &#39;spotify:track:0j55p8YRAPG8yajtNyjt6A&#39;,
+ &#39;spotify:track:6gk2V87atn7XaaAltdYsKd&#39;,
+ &#39;spotify:track:1kPBHRXyXdrtYfUfeRwBko&#39;,
+ &#39;spotify:track:53oWwSxPuyH2cjYKXH8fgO&#39;,
+ &#39;spotify:track:5MM6AKQW2WZkexW6K6TdBq&#39;,
+ &#39;spotify:track:42rFOQqHmXf9IkdwVqkooK&#39;,
+ &#39;spotify:track:0eX0IL0sLmEQQAhojl357S&#39;,
+ &#39;spotify:track:1MQCTOWVfy4PcuBXkBsHVB&#39;,
+ &#39;spotify:track:5HEjbOF2miSnhwJX41mXZJ&#39;,
+ &#39;spotify:track:4SWkHr15YgPdLG25gJpJiX&#39;,
+ &#39;spotify:track:7KEguG3CDoestm50v6XET5&#39;,
+ &#39;spotify:track:5dWfl2PBpKHpBVdz95wxK1&#39;,
+ &#39;spotify:track:2He3NOyqtLNE3RQPpeDdSb&#39;,
+ &#39;spotify:track:0RZXNlGPvfMo54fd6uCvAT&#39;,
+ &#39;spotify:track:0YYhDyUqEGdO6mEUYQvZMw&#39;,
+ &#39;spotify:track:6wpz7aQOAk2plmGYrSr61H&#39;,
+ &#39;spotify:track:0jyT0KDZEVQGg8YJZrWvcm&#39;,
+ &#39;spotify:track:7Jb5kszpP3bbm9niXxvHtk&#39;,
+ &#39;spotify:track:6QEvc1Xriqvn70EG2VrDy3&#39;,
+ &#39;spotify:track:6Y8RnWtEAF6jSMNtuzJmnj&#39;,
+ &#39;spotify:track:1tfjYWYkJeZPjaSsF4YdH4&#39;,
+ &#39;spotify:track:2zOs2Dck8ilE2DqpjZVdD2&#39;,
+ &#39;spotify:track:4E5P1XyAFtrjpiIxkydly4&#39;,
+ &#39;spotify:track:3cNjgVBKTJ1SvKhunrCdVy&#39;,
+ &#39;spotify:track:5G36Ny8Kkw0xyofPJXA55h&#39;,
+ &#39;spotify:track:0Q3SC6kEhxYagDP3bFe5K9&#39;,
+ &#39;spotify:track:3Z3nWmHo9Dm3bbHiZcZraD&#39;,
+ &#39;spotify:track:4y5tv0m1pUQMAt4AV7xjta&#39;,
+ &#39;spotify:track:0obMS2ZOAeBBWNM8slSy9D&#39;,
+ &#39;spotify:track:0QqHsY5aaUoZdoBF4ebe15&#39;,
+ &#39;spotify:track:4n3cSoUdQdM3wglBkfLP8I&#39;,
+ &#39;spotify:track:7cV0xhXZOPhdlBUODvCrDZ&#39;,
+ &#39;spotify:track:2UowIqvnh5R2gSQuiVTJD4&#39;,
+ &#39;spotify:track:7jSxbGawkpGL6ySOvVHoaf&#39;,
+ &#39;spotify:track:0v01kH5JCzTx6wWjIRH5H2&#39;,
+ &#39;spotify:track:0ieAoqb0vVSAA4tZQsVeBf&#39;,
+ &#39;spotify:track:2jPLyQJHRJnFu3Dst8bduw&#39;,
+ &#39;spotify:track:4ACxa9buEUnOdYEoPcnMpi&#39;,
+ &#39;spotify:track:2NSFg6KZjXOXLOZ3ayZFbV&#39;,
+ &#39;spotify:track:4s0QpaeB5a3C9cxNGqPXxk&#39;,
+ &#39;spotify:track:0eZBeB2xFIS65jQHerispi&#39;,
+ &#39;spotify:track:1P3MmQNUtdleRmaAElZFA1&#39;,
+ &#39;spotify:track:1LszjjoVwDDZcWUQbzeDLG&#39;,
+ &#39;spotify:track:6QbcLktLNe7eYqh8TjZeCd&#39;,
+ &#39;spotify:track:0hkR93a0LriV2CQUhSXw3h&#39;,
+ &#39;spotify:track:2CVPwqvMufcF3a475EhZQw&#39;,
+ &#39;spotify:track:3YVxSPmoOYnEJzlO2gRdIk&#39;,
+ &#39;spotify:track:1MD4tX2g5hx0D2WQ6JsC2m&#39;,
+ &#39;spotify:track:2AUJzPtP7sFEnIK0zRWOR4&#39;,
+ &#39;spotify:track:0xMEF2WiqKWTIG7Krjungw&#39;,
+ &#39;spotify:track:41FC5kULrM5rbxN7lOuy25&#39;,
+ &#39;spotify:track:4jKq1e80xAYixkIwt6YyV1&#39;,
+ &#39;spotify:track:05KeRMxuutPAe5JOVlzZi3&#39;,
+ &#39;spotify:track:6ysQEIlw4DYNpkzCx0TvOs&#39;,
+ &#39;spotify:track:3mGW6kG5UZLLDb1vVxRnl4&#39;,
+ &#39;spotify:track:3eEQNLhV6KLOcVz4BrbH9l&#39;,
+ &#39;spotify:track:550rQQCGkrTzvp4SfpOPzx&#39;,
+ &#39;spotify:track:2v6r8OXPY1exSpSMROIwr1&#39;,
+ &#39;spotify:track:7sXg1VmdnM1Ho3aJPya5SC&#39;,
+ &#39;spotify:track:5QrrV2BYDmrdA4SRxPNewJ&#39;,
+ &#39;spotify:track:2B7isQhlpOFWhnjYosAZs6&#39;,
+ &#39;spotify:track:0koHJqcpJ5x9M7RkrUVLyt&#39;,
+ &#39;spotify:track:4GvSUxUVUClNo3QM7XvsZV&#39;,
+ &#39;spotify:track:5oIkpctyGGFGCUSoialWbS&#39;,
+ &#39;spotify:track:5CMnZOiqyYBF4ed9quStA3&#39;,
+ &#39;spotify:track:3lMBtTGDs2y8kLNAKeVnkX&#39;,
+ &#39;spotify:track:7hzY0LHz8KdEr1PowHhbdu&#39;,
+ &#39;spotify:track:3cwDSDzTiWr5H5xMQhQ6Mx&#39;,
+ &#39;spotify:track:2nUqoEvPh5fCXCq3CtDGM4&#39;,
+ &#39;spotify:track:269OfNY9Je1QWaDnu31KKp&#39;,
+ &#39;spotify:track:54bxxfdPQ5jsWXMF9JQ0eR&#39;,
+ &#39;spotify:track:4VZDv8sASBS8UruUBGTFdk&#39;,
+ &#39;spotify:track:79DF4VeuuI0Y7NOrimSmR5&#39;,
+ &#39;spotify:track:5TdCUrQdTWZoTSAZH7Pfup&#39;,
+ &#39;spotify:track:7gUtrUENhHW0GMnT2h0W9f&#39;,
+ &#39;spotify:track:1QpMNpzkMxchOeYOn9RbNJ&#39;,
+ &#39;spotify:track:7l0Lr7Tl4Gt8hQj4v3rwtf&#39;,
+ &#39;spotify:track:2bwSCIuNtVrQPVddCi8sOW&#39;,
+ &#39;spotify:track:4UQLQJu3DNvVkMVglwElU2&#39;,
+ &#39;spotify:track:0DLcjcjvUywWkPYseSdg7J&#39;,
+ &#39;spotify:track:5KY7zgFeH2GWoL1zP9mME6&#39;,
+ &#39;spotify:track:1I8956VUImfafRIuccR9Cq&#39;,
+ &#39;spotify:track:3Zat6hZbvo13Va3kMHAKJx&#39;,
+ &#39;spotify:track:6OSyCAmXT4Gkd3OQ2aPOaF&#39;,
+ &#39;spotify:track:1boMeuYiWu7Lq8NSFMCvsw&#39;,
+ &#39;spotify:track:6EOdY7I7Xm1vPP1cyaGbWZ&#39;,
+ &#39;spotify:track:5B5tNyIXRMsIKQqKoSzpt0&#39;,
+ &#39;spotify:track:4Z3qm2aWGTJuJKnv3EWwyD&#39;,
+ &#39;spotify:track:0PT7nlpo11hYYyfnBgtilT&#39;,
+ &#39;spotify:track:25FTMokYEbEWHEdss5JLZS&#39;,
+ &#39;spotify:track:2iO18Hn7raYltnUmpJXlun&#39;,
+ &#39;spotify:track:2e2jSI2Bqb5ju6S1UdFsrr&#39;,
+ &#39;spotify:track:682cnKvTcXg59UvQUic4t2&#39;,
+ &#39;spotify:track:6225vlQNgif1W5dE5KN6Y6&#39;,
+ &#39;spotify:track:3eUlmjvp6SPOshc4JsAAfX&#39;,
+ &#39;spotify:track:4CsDlMtoESHZCMcjuoZInd&#39;,
+ &#39;spotify:track:0eKSlV7HjwHH9KI5SpGrKH&#39;,
+ &#39;spotify:track:2YePYsIAjvrtqL8HQ9pI3b&#39;,
+ &#39;spotify:track:6TJaLcFheD9XjAvhltrQnC&#39;,
+ &#39;spotify:track:0kIHfcHGFGm5xb0dSlKEdp&#39;,
+ &#39;spotify:track:1lp1YyncJKAabaSuP3vvuf&#39;,
+ &#39;spotify:track:4w9PCIop63BgFMXiEv7Emg&#39;,
+ &#39;spotify:track:4yt05iEquMZ4r9Q3hoZMBq&#39;,
+ &#39;spotify:track:0QXaOq4DrPkX7cJsXhERrE&#39;,
+ &#39;spotify:track:5lfnYyADlTmXNrhAG4eqlS&#39;,
+ &#39;spotify:track:3F274sv7NCtXfu88YEEhXd&#39;,
+ &#39;spotify:track:6HS5QOvhd4w3XqJMDaEWcv&#39;,
+ &#39;spotify:track:3gH77FPZuIqEMInBp89U2I&#39;,
+ &#39;spotify:track:6WGaVdhY8uMWMgxiKpdLVy&#39;,
+ &#39;spotify:track:5jbMLzeG5vlZZencTaUm9m&#39;,
+ &#39;spotify:track:0Xg68XXMRWzKQvD5S6BFvI&#39;,
+ &#39;spotify:track:6ZT3coOj97F6CVvruPtnox&#39;,
+ &#39;spotify:track:0ga8SPC1uPdqkzPUns5VVS&#39;,
+ &#39;spotify:track:4keTqSG4zdCmsUsK9KXv9z&#39;,
+ &#39;spotify:track:7qOBjxnF5qUfXc77zUaDFI&#39;,
+ &#39;spotify:track:5MGeW5mHnqeJiM0NPBbkEZ&#39;,
+ &#39;spotify:track:1tTZM7LUDkxcykOVVIGW4W&#39;,
+ &#39;spotify:track:0SfMgcTwpJCSKN0pA0nNCN&#39;,
+ &#39;spotify:track:09UsSyxME0KR5xmIQClUVu&#39;,
+ &#39;spotify:track:4gqbBxOfJpFdXJMAfyKXlq&#39;,
+ &#39;spotify:track:6UD4ZiV5GNEqUMLi5KJv7z&#39;,
+ &#39;spotify:track:58zsLZPvfflaiIbNWoA22O&#39;,
+ &#39;spotify:track:6qWG7dpOSs5dfgJ7d35am5&#39;,
+ &#39;spotify:track:2U8NXPTXZWG2O0ye2sYRiH&#39;,
+ &#39;spotify:track:2WmXaY7nVgIS7ozqJJHfjC&#39;,
+ &#39;spotify:track:1QukgQhqTVgT8VFiG6Vxgb&#39;,
+ &#39;spotify:track:6BC5qv70s01qQpFyKSsuLV&#39;,
+ &#39;spotify:track:4x4bz6m6oYvRPxNU4HRQHZ&#39;,
+ &#39;spotify:track:6bxqzkso7nAs38KiJXS128&#39;,
+ &#39;spotify:track:5YVYVuNA44FT2yVxEXOw3r&#39;,
+ &#39;spotify:track:5uMwuzrvG2377KmsOnEmcg&#39;,
+ &#39;spotify:track:3WeLxo3f1T6pjfj8Fexz9D&#39;,
+ &#39;spotify:track:60zAPpWPM1gZLl3ep9QmCd&#39;,
+ &#39;spotify:track:2oSLptm3VY9mVhxvCNKpfw&#39;,
+ &#39;spotify:track:3G7XYAwtxtoGK7fAm4IlD9&#39;,
+ &#39;spotify:track:0OwX5aROoW1Iip8FV51Efg&#39;,
+ &#39;spotify:track:3SJv9Gmnq6VXM9xNITfIw1&#39;,
+ &#39;spotify:track:1GQwZguBEt9mNIqXnPQTaW&#39;,
+ &#39;spotify:track:3V7394yfE7A1Vso3PqtWFD&#39;,
+ &#39;spotify:track:0xikWgPgYN9BEes0ieZ8Co&#39;,
+ &#39;spotify:track:0TNLaENR0mjJat58GJ7wOs&#39;,
+ &#39;spotify:track:0J3I49UdftZ6qSWZf6ItJs&#39;,
+ &#39;spotify:track:4t80TQHYdtzwnUGBQC4yL1&#39;,
+ &#39;spotify:track:7qzzZG2V9HCz58RxyX5n8n&#39;,
+ &#39;spotify:track:48J4hwHh4KJ5216fktYwWg&#39;,
+ &#39;spotify:track:4BtaPciwVOkH7eFC59i27G&#39;,
+ &#39;spotify:track:0iYwU4n6l1mrfyw9diGLEa&#39;,
+ &#39;spotify:track:2mp3sLUNQaJ025Lx5f4AAJ&#39;,
+ &#39;spotify:track:4xlhd0SpVU3JRULB3Q9s4L&#39;,
+ &#39;spotify:track:1nrv1lKg6R7aT4bPQkywZF&#39;,
+ &#39;spotify:track:1CvhKmrutTAta5awpJcFDn&#39;,
+ &#39;spotify:track:1LpjlPR8Gv52B04UQNLZAw&#39;,
+ &#39;spotify:track:5HVHYpNllysLkUEduWKqlg&#39;,
+ &#39;spotify:track:3cRi3XR81GltxQOgMfjNBA&#39;,
+ &#39;spotify:track:0Nu9WA8kEbBWEsay2s8Q0U&#39;,
+ &#39;spotify:track:2FSVDuHboKIY4MAV10wAIM&#39;,
+ &#39;spotify:track:2YFK8mpSIJfJZS5IsZ1cCc&#39;,
+ &#39;spotify:track:4NTn0Yo8hTGW5tbBANBzfh&#39;,
+ &#39;spotify:track:2ffh99UXcvaqSYALBz2x4J&#39;,
+ &#39;spotify:track:5LnslfFSyDEkBDIfK2s4m5&#39;,
+ &#39;spotify:track:1cZMpIV8p6PATxD32t7LZ1&#39;,
+ &#39;spotify:track:4k9EkhkFZY8Bk41Qi0Ob7P&#39;,
+ &#39;spotify:track:6zkK3JvLYHCxKUcBaEzc0W&#39;,
+ &#39;spotify:track:2v7EYRJaqHg29z1jnx59yI&#39;,
+ &#39;spotify:track:7M7eanIuxFd9IgaB8rAP7b&#39;,
+ &#39;spotify:track:1gVgkQFOKa8Wc1HYsJtPdH&#39;,
+ &#39;spotify:track:2374M0fQpWi3dLnB54qaLX&#39;,
+ &#39;spotify:track:2rIqbiRDXuiWxFHfLgzYRe&#39;,
+ &#39;spotify:track:6iF5JgF1GNUQwlnsgnMzUu&#39;,
+ &#39;spotify:track:6KT8BsrXfGn5SjhKBdL5rY&#39;,
+ &#39;spotify:track:4xtpy5lEYd3Feg17826h4d&#39;,
+ &#39;spotify:track:6LxcPUqx6noURdA5qc4BAT&#39;,
+ &#39;spotify:track:60wK3ylmnDG9MqbnMqbupZ&#39;,
+ &#39;spotify:track:3R33zdBoZmsBAOOYgiGZRI&#39;,
+ &#39;spotify:track:4ntsD33Pgsgk8rUyZLLiUV&#39;,
+ &#39;spotify:track:4ut3GECMptkuUIMiDQPN9i&#39;,
+ &#39;spotify:track:18y85RXNwPsaqTwKPfTqZI&#39;,
+ &#39;spotify:track:2rxfHBai4BOraDIIRgeMZI&#39;,
+ &#39;spotify:track:0lU0iji9AFomv0zxl5JB59&#39;,
+ &#39;spotify:track:1foCxQtxBweJtZmdxhEHVO&#39;,
+ &#39;spotify:track:1hEh8Hc9lBAFWUghHBsCel&#39;,
+ &#39;spotify:track:1rxwgnMAUAQH8lfkw6lnIX&#39;,
+ &#39;spotify:track:40yzbqcZiEIPOWcFVR5Qlr&#39;,
+ &#39;spotify:track:1V490lJLEZRPjDk9JGtcMN&#39;,
+ &#39;spotify:track:5uDASfU19gDxSjW8cnCaBp&#39;,
+ &#39;spotify:track:1vpIpYiTmfPHK69ME8wJ0k&#39;,
+ &#39;spotify:track:0RFCAbinDyaIklfLKfoatm&#39;,
+ &#39;spotify:track:3s5WerS0heEMyikkSgwUqJ&#39;,
+ &#39;spotify:track:1IAPmCI9x7yR2tglbShurL&#39;,
+ &#39;spotify:track:7LjIjnztu0pzLsSQO0wOha&#39;,
+ &#39;spotify:track:2NFYkgjUiiKgplnB7tgjoe&#39;,
+ &#39;spotify:track:4Shpyq2PAgkpO8vKTgqYoW&#39;,
+ &#39;spotify:track:73ZTWCuwudUVvvWipRnQnQ&#39;,
+ &#39;spotify:track:1P80uWtkwsMF7I3XH8wJSx&#39;,
+ &#39;spotify:track:0DgY053iwPDydoRymeGVZX&#39;,
+ &#39;spotify:track:4kK14radw0XfwxJDPt9tnP&#39;,
+ &#39;spotify:track:32yiDCLJUdqYoaDR46z9gD&#39;,
+ &#39;spotify:track:60EtAySYm0qBlPj3LSXil6&#39;,
+ &#39;spotify:track:2xSJiMxoZ9eiqsWhfrdYjs&#39;,
+ &#39;spotify:track:2oii9PUTn2UkFD97W3ge4x&#39;,
+ &#39;spotify:track:0cNJ3huiV99wvUN1tmQLTL&#39;,
+ &#39;spotify:track:47muNlVTjDtQfyUqDaiFlN&#39;,
+ &#39;spotify:track:6DVu6RZWnPrI8OLwrJXReo&#39;,
+ &#39;spotify:track:5dzV75f9qVXVvdXLTqIG4L&#39;,
+ &#39;spotify:track:3bELVNyQDvjRqJiMiFoohe&#39;,
+ &#39;spotify:track:4CisE8n8bzLRnCrL9Oyugg&#39;,
+ &#39;spotify:track:6PTvs4BA2uYE8mKvOyFMPN&#39;,
+ &#39;spotify:track:5kKVGP5CQNuGiFN30cFZVw&#39;,
+ &#39;spotify:track:4raUe9c8X1PYDhMnbjssS3&#39;,
+ &#39;spotify:track:2i37Y95xkPhHtoYBywVBUm&#39;,
+ &#39;spotify:track:63Q9hAFTga7rqYRrAhwIyR&#39;,
+ &#39;spotify:track:6o3s08kk2fQI37vxGZDrJ1&#39;,
+ &#39;spotify:track:5JuA3wlm0kn7IHfbeHV0i6&#39;,
+ &#39;spotify:track:6fTdcGsjxlAD9PSkoPaLMX&#39;,
+ &#39;spotify:track:4F4hKCEgevJgNq27pYz0Mk&#39;,
+ &#39;spotify:track:6ctbCIikHbC6tSOL1rewQX&#39;,
+ &#39;spotify:track:0ez5z16E2mTpqlwr9kxxoD&#39;,
+ &#39;spotify:track:2XFak3Sx0XCoXJpPt5TeeR&#39;,
+ &#39;spotify:track:3MoJoDStgGIfFEGkRzUSEB&#39;,
+ &#39;spotify:track:2npStoMbQxG1LcIeF4PZrj&#39;,
+ &#39;spotify:track:4xXpuMj1agXiicS5jZovFE&#39;,
+ &#39;spotify:track:1GaYqv2NMMlVbG3ewJQ4A6&#39;,
+ &#39;spotify:track:0lUt61v9PK6Qrl0GjkTXAw&#39;,
+ &#39;spotify:track:2i1RgMi6dTpTEPEYEceDs4&#39;,
+ &#39;spotify:track:3otZLoLcx2d74hx8RaHXh6&#39;,
+ &#39;spotify:track:0pn6qyOJYNwP9nhGg3L7dV&#39;,
+ &#39;spotify:track:3lGL219tz1Cjy5Zeno5T7m&#39;,
+ &#39;spotify:track:2ytH5wDuqhgLTiDVYioteq&#39;,
+ &#39;spotify:track:1mSMwIW4ZK6DVl499FvDPv&#39;,
+ &#39;spotify:track:4tG0cdbL7v4pQ8RWOqLDHx&#39;,
+ &#39;spotify:track:05BDasfCA4TNR3HbMjSpgM&#39;,
+ &#39;spotify:track:2SIN2Xn0VSfhFPo5juyhnn&#39;,
+ &#39;spotify:track:13ZzTL4ycsFXZ9nxjPHIrM&#39;,
+ &#39;spotify:track:0w7XcNz84saf5p1nigc22t&#39;,
+ &#39;spotify:track:6aFvJSvmAuTuQSPZwK8rrN&#39;,
+ &#39;spotify:track:6ELFcF8Wke9n2y6iWWTZU7&#39;,
+ &#39;spotify:track:2gdmo3ULjoHN3iDsufbvPG&#39;,
+ &#39;spotify:track:5Nn2Dj7OQsGL6pgQ9iIzPp&#39;,
+ &#39;spotify:track:4zMP6aieSmWQNFdp3O4Owv&#39;,
+ &#39;spotify:track:44aHFtDMjOmUCVeOOsmQ7A&#39;,
+ &#39;spotify:track:1ptm2NAvNHnVtpDN51DLCJ&#39;,
+ &#39;spotify:track:0U0ldCRmgCqhVvD6ksG63j&#39;,
+ &#39;spotify:track:3fCULruC32uHpryWa2yKRI&#39;,
+ &#39;spotify:track:3be5ey9pSoqLBu6UNtoRCc&#39;,
+ &#39;spotify:track:1ZyMdpNyiw4VYsbmHFgzEp&#39;,
+ &#39;spotify:track:2OIlOS419OC0McH7i27Kat&#39;,
+ &#39;spotify:track:3Q45IUL9NICk5gL8kctLMO&#39;,
+ &#39;spotify:track:78Id7Rdh9fMmmFYuDZB0SN&#39;,
+ &#39;spotify:track:5zT5cMnMKoyruPj13TQXGx&#39;,
+ &#39;spotify:track:09WxJCWFMWAxTHBLLelpDS&#39;,
+ &#39;spotify:track:71A6V5dh5Y8ikhm6NGwZ7p&#39;,
+ &#39;spotify:track:3WWVDPjihd1VITBLF10nha&#39;,
+ &#39;spotify:track:2fos7qVkEFxPREMUUOnm3l&#39;,
+ &#39;spotify:track:0Ztn5JEuB4NwFwj4vVvd2c&#39;,
+ &#39;spotify:track:5adHHTqF2cbrsUf6crK8vl&#39;,
+ &#39;spotify:track:7xFIGogB0650amgZQnsVpI&#39;,
+ &#39;spotify:track:6OVsn2uURKTLIguCDxgNWS&#39;,
+ &#39;spotify:track:4BFMQ15vXr626UOoZL8bUI&#39;,
+ &#39;spotify:track:2d14mYTkxQF8XEAHhYkfRM&#39;,
+ &#39;spotify:track:57kozn0j4DL3toKrqKQY0U&#39;,
+ &#39;spotify:track:2VTQAjZr7FPoEJD2sNoH3o&#39;,
+ &#39;spotify:track:26T7C1NMXKE7hCWhKH2l0o&#39;,
+ &#39;spotify:track:51tlhldI8DI52dSkwveAeI&#39;,
+ &#39;spotify:track:4gXPGKRbGGbcSI8imJMkZJ&#39;,
+ &#39;spotify:track:2mUNPeRl81MwJpy40yqjED&#39;,
+ &#39;spotify:track:0M803XWBMwksKgd09qv6B7&#39;,
+ &#39;spotify:track:4dyx5SzxPPaD8xQIid5Wjj&#39;,
+ &#39;spotify:track:3ZYeIGWneqMC98Gu0Ely1C&#39;,
+ &#39;spotify:track:3X3FBv1Aid3AkVdCkgkpnF&#39;,
+ &#39;spotify:track:4pJt6B16mFRkmHfXUYmmrK&#39;,
+ &#39;spotify:track:1QEEqeFIZktqIpPI4jSVSF&#39;,
+ &#39;spotify:track:3z31bGbh9zThTEXPQqErif&#39;,
+ &#39;spotify:track:01MO5Ib9mCG7srUhZl52BA&#39;,
+ &#39;spotify:track:6vXHaWpqkbuvzIDvR3LnKd&#39;,
+ &#39;spotify:track:4PFQ4EQBtJUp2jQjpmYkVA&#39;,
+ &#39;spotify:track:4L2K7JKseFCBoHMZEAszW0&#39;,
+ &#39;spotify:track:1almCHdsfikRPfVB9VrEdT&#39;,
+ &#39;spotify:track:6zWpqo98M9Ai6TK3qmm55o&#39;,
+ &#39;spotify:track:67ncKGqScuJdNUN6bTqclA&#39;,
+ &#39;spotify:track:61iyAeMVUNu7vIVqedsBFB&#39;,
+ &#39;spotify:track:5ngpjmLmY4zqbzGMxGCdsm&#39;,
+ &#39;spotify:track:4MGOIWgrzKBzFGBDwn39yu&#39;,
+ &#39;spotify:track:0sQdzJAChz97Ea2Zg2Yx7Z&#39;,
+ &#39;spotify:track:0qvCuc6fifzBd1wwsXedeC&#39;,
+ &#39;spotify:track:1gTpngtG7wJGnGmlgKZ0ew&#39;,
+ &#39;spotify:track:4ARhdB2FzpXcko8T03YVen&#39;,
+ &#39;spotify:track:6ijikBGYf0OHlVIvm8lept&#39;,
+ &#39;spotify:track:0G8eOTTegmNQwuKWUqxye9&#39;,
+ &#39;spotify:track:66PmO1K6RXjj6ouXzMeodH&#39;,
+ &#39;spotify:track:2twwV8BMerFcRZ1fSEOuF1&#39;,
+ &#39;spotify:track:30bZbp1JbPVXhidkCm3ceh&#39;,
+ &#39;spotify:track:2BYiebB5e5zuQ5BSmemJpD&#39;,
+ &#39;spotify:track:5fBYKR15HkO5xzH4s3oJpy&#39;,
+ &#39;spotify:track:0Vwfd6fxFrL3kCnZSJ9vid&#39;,
+ &#39;spotify:track:0VkSBncg56TEFPQiXwvX33&#39;,
+ &#39;spotify:track:6u5Iuglddxopg126SJfJgh&#39;,
+ &#39;spotify:track:4oy5Q9wzbg43LhlubipZIZ&#39;,
+ &#39;spotify:track:1lhWdmgKs69XbvCHQs9OXR&#39;,
+ &#39;spotify:track:0DW5anNzTO7h0OlKqFsVQ6&#39;,
+ &#39;spotify:track:4eidDTiwJWEiCrDoM2AIlY&#39;,
+ &#39;spotify:track:5rfvovWBd35hYqk6rWLIrr&#39;,
+ &#39;spotify:track:0wAInqeoqKnqYiKB2pYHNT&#39;,
+ &#39;spotify:track:70RPjUR5l0jmBQndfNXP0z&#39;,
+ &#39;spotify:track:5AOcHpXfjKpHK7sDOC2Foy&#39;,
+ &#39;spotify:track:0q8nQ0H4ad4KYcZdrTZPux&#39;,
+ &#39;spotify:track:6UdFBqkgJwKPdO0Gcdg7kK&#39;,
+ &#39;spotify:track:6s0NHplywwr1IjnQpUpWJk&#39;,
+ &#39;spotify:track:2GqvbLpOPU73AYu13XPEgs&#39;,
+ &#39;spotify:track:2olSJ44gEfU3t02ZfhqCee&#39;,
+ &#39;spotify:track:0K6yUnIKNsFtfIpTgGtcHm&#39;,
+ &#39;spotify:track:4uLU6hMCjMI75M1A2tKUQC&#39;,
+ &#39;spotify:track:68ZD7M5tOBBM0N5XWRECoD&#39;,
+ &#39;spotify:track:6iNJ8Zdt3Kb2E7JuvTj6B5&#39;,
+ &#39;spotify:track:1AkTW13ysu0AJrwuM6UY0I&#39;,
+ &#39;spotify:track:0ODwXxkMyxS1a8T08foJtc&#39;,
+ &#39;spotify:track:4STCTQ1h0VuWfvDyhGOxkv&#39;,
+ &#39;spotify:track:0oXwUeFAE6IR2lYhaTpxRT&#39;,
+ &#39;spotify:track:5DuTNKFEjJIySAyJH1yNDU&#39;,
+ &#39;spotify:track:5AUWrwBm4cUp71jJhXHctA&#39;,
+ &#39;spotify:track:1jqB1YzZaDrxYKaFqTDLUe&#39;,
+ &#39;spotify:track:7jxWVuVdosa6eGlHSZWXQJ&#39;,
+ &#39;spotify:track:0DdpxWfVvUGgkJv5536tiF&#39;,
+ &#39;spotify:track:61jZlxHGgf2qM3Ehe0v6e3&#39;,
+ &#39;spotify:track:48IaSV3rxpZtD0DuSOOcli&#39;,
+ &#39;spotify:track:5efvxYn0J1q8iuIZBqpDD7&#39;,
+ &#39;spotify:track:3kKVqFF4pv4EXeQe428zl2&#39;,
+ &#39;spotify:track:5l9c6bJmzvftumhz4TMPgk&#39;,
+ &#39;spotify:track:4V7sFJGYLOQYyJPxQ3CPNP&#39;,
+ &#39;spotify:track:6vITFXjXN3i1VwWI1iv3fc&#39;,
+ &#39;spotify:track:6HKUskrFUQdUoiVr3dO6yj&#39;,
+ &#39;spotify:track:6CDaYzCjahDKqFAIslpveh&#39;,
+ &#39;spotify:track:54KFQB6N4pn926IUUYZGzK&#39;,
+ &#39;spotify:track:6D0b04NJIKfEMg040WioJQ&#39;,
+ &#39;spotify:track:2obblQ6tcePeOEVJV6nEGD&#39;,
+ &#39;spotify:track:1SayqEg8HKK2IeIEWjdYxY&#39;,
+ &#39;spotify:track:498YWgZPJWIA4lphXtCNma&#39;,
+ &#39;spotify:track:23nbDkpZ8bfquxFejACxL1&#39;,
+ &#39;spotify:track:4DyfJFTQb27adTDdhFeSgD&#39;,
+ &#39;spotify:track:3i8zsYoNVBR70hhGaZUbxK&#39;,
+ &#39;spotify:track:4qVW48hAXsfcSqTsbQr89Q&#39;,
+ &#39;spotify:track:6R0GRYk2vs2XuBVemYK5YZ&#39;,
+ &#39;spotify:track:2lOprPuB4ekjSi9jtxTUxj&#39;,
+ &#39;spotify:track:7ih9bLu9DgdO3LZ5dpunz9&#39;,
+ &#39;spotify:track:0Yp73Qo0CoR2P9kceNC46y&#39;,
+ &#39;spotify:track:1CoOHJAHtKEDnUBrp3nKAB&#39;,
+ &#39;spotify:track:0Nw7rj504Nw4erdXwaSOY5&#39;,
+ &#39;spotify:track:7usbPC0r2Scsv768oP5Uma&#39;,
+ &#39;spotify:track:6JLcz9UGiVxAmEZXlCucn5&#39;,
+ &#39;spotify:track:3xKTpGCsafXzV4muM1Hpl3&#39;,
+ &#39;spotify:track:02DaqClSJTt95OvsiroP5j&#39;,
+ &#39;spotify:track:0zU0rJoZ1qW7dBlJpM50Xm&#39;,
+ &#39;spotify:track:6TvAYNcu1Yey6oj0awxsFj&#39;,
+ &#39;spotify:track:0EL7gG7aGsBYcKWmsBvm0G&#39;,
+ &#39;spotify:track:3pGnvyd0UBaFKF9PYM2ULM&#39;,
+ &#39;spotify:track:6vfrxrPw6G2W7h6IDQdJ8n&#39;,
+ &#39;spotify:track:6TsE30wjcOmuQRheHdtaAF&#39;,
+ &#39;spotify:track:7cOKuMZ1zn36nELzNTnee9&#39;,
+ &#39;spotify:track:2TbQOKDTGrg3ppGkO3gltX&#39;,
+ &#39;spotify:track:5dZlQv1f1euEtwgKmiHZGs&#39;,
+ &#39;spotify:track:1q74TesvRCIo5RvJM5B84F&#39;,
+ &#39;spotify:track:20s34XSPIiYMGSFDRSs24t&#39;,
+ &#39;spotify:track:6EpRaXYhGOB3fj4V2uDkMJ&#39;,
+ &#39;spotify:track:36Cv84a2qCZarCdtTcMJnj&#39;,
+ &#39;spotify:track:10hkfuMIpEbTuHBTbfxlDv&#39;,
+ &#39;spotify:track:2BaXRCVgn621xHOGoFSuW5&#39;,
+ &#39;spotify:track:6yqubZF4LsME7BEHvT6kEG&#39;,
+ &#39;spotify:track:6PUJEckAKg4Mp47VFZxdpJ&#39;,
+ &#39;spotify:track:4sjFxvB5yYqJQNKx1AV6bk&#39;,
+ &#39;spotify:track:2mobr1UlKjhxDTOVqng3jw&#39;,
+ &#39;spotify:track:2jS5v72rq6sZ1uwfyd2Dxg&#39;,
+ &#39;spotify:track:1mN4jJXTVcVGhaQ2fhW9ka&#39;,
+ &#39;spotify:track:0ydi4AWyWjhR0NhF3T9lXD&#39;,
+ &#39;spotify:track:2H3BNi4FyJqjpbTv8qfTtI&#39;,
+ &#39;spotify:track:7DT8GwyRKluJhnl0BEOUA2&#39;,
+ &#39;spotify:track:1rKznc9yqyCO6b7Cdy94wG&#39;,
+ &#39;spotify:track:6GQZ5WNHhqs6b0BD0lUK96&#39;,
+ &#39;spotify:track:2Xrf39KgA7Rnr3JEcZ5LPm&#39;,
+ &#39;spotify:track:1DKhNLbprRP2CiK8jxEAOC&#39;,
+ &#39;spotify:track:7j1JdDgBADUiQLKlgxLaSI&#39;,
+ &#39;spotify:track:3ONMBfq0htubv1DjpI5b8A&#39;,
+ &#39;spotify:track:6UCDKscr5W8zSs06GTFcqX&#39;,
+ &#39;spotify:track:7ijc4vv1XTe7HRRY9ScmPD&#39;,
+ &#39;spotify:track:2V9JAFdZqOyt3nRNVWcZEJ&#39;,
+ &#39;spotify:track:47AZCUpitBMJt6Smj9Tww3&#39;,
+ &#39;spotify:track:6niggr2WDookeL2nBezZQL&#39;,
+ &#39;spotify:track:5cdxAWuRElZp7NxVAkeheW&#39;,
+ &#39;spotify:track:3lkxMjl1DE627kxCM8l6cN&#39;,
+ &#39;spotify:track:3JtmRIkVK95rmf4kWKA3ON&#39;,
+ &#39;spotify:track:3NZerG5aPauXkTKJrSfbco&#39;,
+ &#39;spotify:track:6mORGLOz79w6VsCRLWYYuK&#39;,
+ &#39;spotify:track:5xioIP2HexKl3QsI8JDlG8&#39;,
+ &#39;spotify:track:75dL1cqk3oqV1QP3NNaOdv&#39;,
+ &#39;spotify:track:3cbTV3IZZvSBYVcl0xuZbY&#39;,
+ &#39;spotify:track:6dEs3CH2goHCTR6XCTctVd&#39;,
+ &#39;spotify:track:1iUoWD9qE93GyoT80O5IKt&#39;,
+ &#39;spotify:track:5H6F1Jjq4IF8cYXTCcrq41&#39;,
+ &#39;spotify:track:5lZAzpl6XoswhDz7BukTta&#39;,
+ &#39;spotify:track:0uVyZywUNOp6S0dU5r8TS8&#39;,
+ &#39;spotify:track:0rEqoKxL9HGRRvtsQygeZn&#39;,
+ &#39;spotify:track:348jCCtlWzPsHVrYPV5oDc&#39;,
+ &#39;spotify:track:5UbBcnZXo89yBRsNzmZVxM&#39;,
+ &#39;spotify:track:54DH9HPiEDLZpEg0TjAiqz&#39;,
+ &#39;spotify:track:6Z8R6UsFuGXGtiIxiD8ISb&#39;,
+ &#39;spotify:track:1Je1IMUlBXcx1Fz0WE7oPT&#39;,
+ &#39;spotify:track:3yVXZm1flshiCRpxWQjUSK&#39;,
+ &#39;spotify:track:11AuKP7AVvmhf1gmM9Ew88&#39;,
+ &#39;spotify:track:63KYX2G5ZZTWCFflwSIgCD&#39;,
+ &#39;spotify:track:2qC1sUo8xxRRqYsaYEdDuZ&#39;,
+ &#39;spotify:track:1OWVMFheLHbjIBEX2Lz2KS&#39;,
+ &#39;spotify:track:23Jm3lAqydJirDzfCNct5o&#39;,
+ &#39;spotify:track:3Q9t1A12iUemHTAWnH7PjD&#39;,
+ &#39;spotify:track:24nRdDUUIdM2mv1YdwMdu6&#39;,
+ &#39;spotify:track:2G1YqEwL7X1DyvkGuFqMzV&#39;,
+ &#39;spotify:track:61oDWluoCJ2FowqSEEvMmq&#39;,
+ &#39;spotify:track:4BZufKgQKJNUEd4NNYHc63&#39;,
+ &#39;spotify:track:3MEHpAw1EChQaoZTCkuX3a&#39;,
+ &#39;spotify:track:01dPxcBaWnKbIRbgdVESs9&#39;,
+ &#39;spotify:track:05ApEAT889haImO4kMB6Z1&#39;,
+ &#39;spotify:track:0PM9goJ7ZaLpq5wR16LZlp&#39;,
+ &#39;spotify:track:27PmvZoffODNFW2p7ehZTQ&#39;,
+ &#39;spotify:track:2E2tfz55diBhRxmursGiUl&#39;,
+ &#39;spotify:track:0y1QJc3SJVPKJ1OvFmFqe6&#39;,
+ &#39;spotify:track:1FhbZvzP1zGhIEgtnmX7QN&#39;,
+ &#39;spotify:track:1oJaumhe1rUBOgX0k0z0eg&#39;,
+ &#39;spotify:track:7zBPzAjKAqQpcv8F8GCq5s&#39;,
+ &#39;spotify:track:3eBkt7BdfKqA87MxwFBWRG&#39;,
+ &#39;spotify:track:2dEVdJTq79QElGsZgx5rFP&#39;,
+ &#39;spotify:track:20RHP0KD0gDz7xzmzZCGBo&#39;,
+ &#39;spotify:track:4lgqc2BTURR2zY1P8J0BjP&#39;,
+ &#39;spotify:track:2ZXsvL9DO2MPv43Ay1IxgR&#39;,
+ &#39;spotify:track:7gHcMwqOmD1aEUfEjsz0MO&#39;,
+ &#39;spotify:track:6Yk8ceRQHJJCkcEntNIkzi&#39;,
+ &#39;spotify:track:0RN5fZ3SVyT0VhltQxNQx4&#39;,
+ &#39;spotify:track:4T6p9mFEP9J1HbQWfdIP6F&#39;,
+ &#39;spotify:track:3XabgBQYC7H80agKcAq83Y&#39;,
+ &#39;spotify:track:2hhHwY2rzWLeFenIg3e6o0&#39;,
+ &#39;spotify:track:3FUJGbUvwM8IooDXaY8mN1&#39;,
+ &#39;spotify:track:2WMRd3xAb9FwXopCRNWDq1&#39;,
+ &#39;spotify:track:0gljI0CtjpdZK6ecidfxto&#39;,
+ &#39;spotify:track:3uhvGiBZWL2sot0pH0qRsR&#39;,
+ &#39;spotify:track:6b6bYwJGyVMrRshcJ1WHru&#39;,
+ &#39;spotify:track:6uQKuonTU8VKBz5SHZuQXD&#39;,
+ &#39;spotify:track:7wMq5n8mYSKlQIGECKUgTX&#39;,
+ &#39;spotify:track:5hbNSo9Ckl7ku8664sn0Jj&#39;,
+ &#39;spotify:track:4q1LP4YcHOIUy8XSqpR8HH&#39;,
+ &#39;spotify:track:2pbWkjtGtjkzBdZ95GFINm&#39;,
+ &#39;spotify:track:4gvea7UlDkAvsJBPZAd4oB&#39;,
+ &#39;spotify:track:6m0qBDIhzICOwWMPZdgyVK&#39;,
+ &#39;spotify:track:41CUuaX52fZjRzzCK0rkkh&#39;,
+ &#39;spotify:track:4ya82vEkIk1HJpuPDhESOC&#39;,
+ &#39;spotify:track:0G3fbPbE1vGeABDEZF0jeG&#39;,
+ &#39;spotify:track:0sXvAOmXgjR2QUqLK1MltU&#39;,
+ &#39;spotify:track:5sFDReWLrZHLFZFjHsjUTS&#39;,
+ &#39;spotify:track:7rlCeTnjn0plPZkVAcctPZ&#39;,
+ &#39;spotify:track:3sBNaoeB8nQGtognBs5ycd&#39;,
+ &#39;spotify:track:0nKxQeKar9oFerIGJ8H3nc&#39;,
+ &#39;spotify:track:1z15fhSgN6U2k4gqA1Zu4j&#39;,
+ &#39;spotify:track:7jokW7mTAhBIuXW43OQlQR&#39;,
+ &#39;spotify:track:0KB8A2jnZKT6aXvOzhKlCo&#39;,
+ &#39;spotify:track:31G6mhkP3crrFhLEZUZOhW&#39;,
+ &#39;spotify:track:6vRp1EGkh1SE7uGNhbqVjT&#39;,
+ &#39;spotify:track:2GUPyVJIFf9jMVRjhThmnY&#39;,
+ &#39;spotify:track:4Lora6205JbkK6BJlttlRH&#39;,
+ &#39;spotify:track:3k9upsOz6gyeOEcUX9fkmT&#39;,
+ &#39;spotify:track:6MdqqkQ8sSC0WB4i8PyRuQ&#39;,
+ &#39;spotify:track:1RjCsqiatsrQwQvqjecr30&#39;,
+ &#39;spotify:track:71kZP3u1h27zyjfULjSxPT&#39;,
+ &#39;spotify:track:00SlXYapXP5KuDarLc2hUJ&#39;,
+ &#39;spotify:track:0bAM9qivrntXnHyklRRx39&#39;,
+ &#39;spotify:track:2BPfKiV9U0CR1dpUgeUwuH&#39;,
+ &#39;spotify:track:2mLvvy1t4MgseCIevIf9yS&#39;,
+ &#39;spotify:track:7n5m8nDAnyXo81tr4B3Bcw&#39;,
+ &#39;spotify:track:01a0J96fRD91VnjQQUCqMK&#39;,
+ &#39;spotify:track:71dfpbSERvHqZKAGQBeBRk&#39;,
+ &#39;spotify:track:0YuYjJAVSCC3RViA8oEZXF&#39;,
+ &#39;spotify:track:1yy2DlSDtEt90d54rPDPXz&#39;,
+ &#39;spotify:track:0IxGgqjkjVtC9za87YRGtK&#39;,
+ &#39;spotify:track:3VAeTjREoKPY1exOXR4oBm&#39;,
+ &#39;spotify:track:7ptQpw6gUibtO1mPufc2FD&#39;,
+ &#39;spotify:track:15EPc80XuFrb2LmOzGjuRg&#39;,
+ &#39;spotify:track:1280ebYtTct0ytDEZdrcvQ&#39;,
+ &#39;spotify:track:5L25WIqnruhVYln7jxAJ8p&#39;,
+ &#39;spotify:track:19gEmPjfqSZT0ulDRfjl0m&#39;,
+ &#39;spotify:track:3b00LSFIRqnHvkoDEs5fkg&#39;,
+ &#39;spotify:track:3xjseYFU26DIH1ikZN263F&#39;,
+ &#39;spotify:track:4QUu6TJFb1kYxoBRMSKNWI&#39;,
+ &#39;spotify:track:1JqVM7aB2AwafhGHRABPAA&#39;,
+ &#39;spotify:track:0cJLYpRTqODzv9SiQukE4Z&#39;,
+ &#39;spotify:track:1pvGWSvIXr8PTk8nC4SnXK&#39;,
+ &#39;spotify:track:6nN9m73dugjVC2MCNpnq5o&#39;,
+ &#39;spotify:track:5wpDupdKxD4aKNV8kbtdYt&#39;,
+ &#39;spotify:track:3UjJP4ludb74a29P5EHEIo&#39;,
+ &#39;spotify:track:2lmKQwpiWVDYoBvc0SEMhe&#39;,
+ &#39;spotify:track:1fnULsZuORnAgCFFbM8nTZ&#39;,
+ &#39;spotify:track:3epn3iuLX3oNzGOAA1144S&#39;,
+ &#39;spotify:track:37JPdGgYcQAJSElj5boJx8&#39;,
+ &#39;spotify:track:00gwlKTiWvu6xqvsWy7ehA&#39;,
+ &#39;spotify:track:5yc59J3MR3tVDPTOgwgRI5&#39;,
+ &#39;spotify:track:6sghEq6gM4Ugadwa12H7Sa&#39;,
+ &#39;spotify:track:5LgYy64uprlaC3fb8ysnte&#39;,
+ &#39;spotify:track:30XzWDBISN78wuaIq0isX7&#39;,
+ &#39;spotify:track:4zkuXwGFnAsdC6oROpTKX0&#39;,
+ &#39;spotify:track:7LD5Kxk4Ut16nvic7liiHs&#39;,
+ &#39;spotify:track:0RMr1YqH6Mv6HeklKsl76e&#39;,
+ &#39;spotify:track:1pNlZQeoPnlxqf1Mjgm0H2&#39;,
+ &#39;spotify:track:3XJJP46XhBhNWyVJ7DjZtO&#39;,
+ &#39;spotify:track:5Y6Q2X9TOKOcHD3I3Gevo8&#39;,
+ &#39;spotify:track:03egwBfmIRrfZtGCBhj5kg&#39;,
+ &#39;spotify:track:0CokSRCu5hZgPxcZBaEzVE&#39;,
+ &#39;spotify:track:3HU4vFJPelZfj0xyJDVALk&#39;,
+ &#39;spotify:track:0KQ1LhU7vGiXqn7eAw1nfl&#39;,
+ &#39;spotify:track:1KzW2k1dNh9nJrK6WhneTW&#39;,
+ &#39;spotify:track:0jSMveIWvnhDIvzqN74Uc7&#39;,
+ &#39;spotify:track:70adgkFUakt1DgxqwTMC6X&#39;,
+ &#39;spotify:track:6yIHGmQLJxWAUZ1ZkENemN&#39;,
+ &#39;spotify:track:7oufCpJK1BHeZ3QfBjydBB&#39;,
+ &#39;spotify:track:5Crm1pbONlPuh9MzVg8usZ&#39;,
+ &#39;spotify:track:0V8jGgK39sLsj2yAHHPigU&#39;,
+ &#39;spotify:track:4JFM7KpVxgPXargA4rzB60&#39;,
+ &#39;spotify:track:7AjfklMN4WpQYz5FkT4E66&#39;,
+ &#39;spotify:track:4SGBuq37Ol4HJr7pQqFMKa&#39;,
+ &#39;spotify:track:493S4t7eq13ehGKl5g9WS9&#39;,
+ &#39;spotify:track:6P2Lh7h0yzo8gbI2cIBtIp&#39;,
+ &#39;spotify:track:751wKDM4y5zurzhSxcUxqP&#39;,
+ &#39;spotify:track:6h9xi8i9zVOXk5FqGqcBNH&#39;,
+ &#39;spotify:track:0tICYNayWWhH9GPeFrfjfD&#39;,
+ &#39;spotify:track:63BokRfXSQhEU6Qi2dSJpZ&#39;,
+ &#39;spotify:track:7cVmKBwzPsh4Fmb6SplfEm&#39;,
+ &#39;spotify:track:2XTTOhk57lti1sEuRgmmVS&#39;,
+ &#39;spotify:track:3BSm4qArTl6tLgTx92LSYt&#39;,
+ &#39;spotify:track:21BrE3qn6z1S3KNA4d8uPK&#39;,
+ &#39;spotify:track:4X4NrHp5VpibgirzuImxXd&#39;,
+ &#39;spotify:track:5z6xHjCZr7a7AIcy8sPBKy&#39;,
+ &#39;spotify:track:5RsUlxLto4NZbhJpqJbHfN&#39;,
+ &#39;spotify:track:0kMxybaVSjw5oXbHG9sDdc&#39;,
+ &#39;spotify:track:4UrlusvpRQab5AWb1SqEjR&#39;,
+ &#39;spotify:track:1mMLMZYXkMueg65jRRWG1l&#39;,
+ &#39;spotify:track:4SXcG6Ti32myNw9GJ9qeDt&#39;,
+ &#39;spotify:track:0weAUscowxeqDtpCgtbpgp&#39;,
+ &#39;spotify:track:3gZUflBBfgS3QiTSTg0hk0&#39;,
+ &#39;spotify:track:2bRTv94ezSCAYb04N7siLH&#39;,
+ &#39;spotify:track:0F5DFgLAu53jPN8ElmZssr&#39;,
+ &#39;spotify:track:1vNn7rVQT6UtEW1NGH53fT&#39;,
+ &#39;spotify:track:6ROH6PSoPDUDeYzE98UL9T&#39;,
+ &#39;spotify:track:0k6HUzaRHpQ3eEWr1C7Esh&#39;,
+ &#39;spotify:track:40yJGQyEaBbIkXpwMFkXip&#39;,
+ &#39;spotify:track:1TFui640dnG5YInNTqY4SX&#39;,
+ &#39;spotify:track:0TnN3SbTgg9vJePYjw4QHx&#39;,
+ &#39;spotify:track:7osBjxxoPSCceUMdkyFh9O&#39;,
+ &#39;spotify:track:39aRmixB9qNtCU2t8BmsC1&#39;,
+ &#39;spotify:track:7FuRjlwyTY9uTAUgGpZtJU&#39;,
+ &#39;spotify:track:1JURww012QnWAw0zZXi6Aa&#39;,
+ &#39;spotify:track:7wsOAPS2qrNmJp0UJjMwJv&#39;,
+ &#39;spotify:track:1XHFob24QklIXtLRopKirJ&#39;,
+ &#39;spotify:track:4gAgdhTIx6T76baPfbXHQX&#39;,
+ &#39;spotify:track:0W0rNPWbtsSLe48UZUwqf4&#39;,
+ &#39;spotify:track:2ghy3erwyL3ZvQthH7iXhS&#39;,
+ &#39;spotify:track:0uMn8WKu3qtQLaUyal1bsz&#39;,
+ &#39;spotify:track:17OrgPBqhjPkYo9RKMBl0D&#39;,
+ &#39;spotify:track:4W0m2V6Lc2bSQRl7xZiGx1&#39;,
+ &#39;spotify:track:6mb6lVLNrcUgLnEN8QnDJd&#39;,
+ &#39;spotify:track:0kEQwPz9SrMN8E5iL9cxQL&#39;,
+ &#39;spotify:track:0W7AbEauB7cP4pidLclApe&#39;,
+ &#39;spotify:track:6y2DHyCYf6azhUfXmnuH6w&#39;,
+ &#39;spotify:track:5WsE374LpBomAkCRSOcjWo&#39;,
+ &#39;spotify:track:51FpzuGkRYXFgsE2zXt9av&#39;,
+ &#39;spotify:track:5ISLPbBXYc9mpgxyAuXsls&#39;,
+ &#39;spotify:track:2LdaAgX3r9WiyuOJRoN5m2&#39;,
+ &#39;spotify:track:6BEaCD75Zwlg7B63nATEli&#39;,
+ &#39;spotify:track:6VW0KDtZA6AeDoOMIxMpNi&#39;,
+ &#39;spotify:track:2RPbEp0DyBVlkRvvYKopO7&#39;,
+ &#39;spotify:track:4OmO3r5F1pWwxExUQhP2xN&#39;,
+ &#39;spotify:track:7eFRKuSuznmVqA8nx4PPAQ&#39;,
+ &#39;spotify:track:7kGHK6l1CKog8aJNodtKcc&#39;,
+ &#39;spotify:track:6ekV6MGnPTuCOnjB4VcWGc&#39;,
+ &#39;spotify:track:2boJnT3S2aSBagFEUTXrfx&#39;,
+ &#39;spotify:track:1rLl5GAkjPXVbG2B8MrZAi&#39;,
+ &#39;spotify:track:57VjUdfXzNsDVCaKJv2d7I&#39;,
+ &#39;spotify:track:1u9O8H6eSMx5x1zNOn41WL&#39;,
+ &#39;spotify:track:3RwbqrHZwHg3hpe6sOxMpE&#39;,
+ &#39;spotify:track:37f4ITSlgPX81ad2EvmVQr&#39;,
+ &#39;spotify:track:6MDijuuArPJv1vbp7K1x3f&#39;,
+ &#39;spotify:track:6A4Jc8npNo79BOgsrPptLA&#39;,
+ &#39;spotify:track:51c94ac31swyDQj9B3Lzs3&#39;,
+ &#39;spotify:track:4kgd0pyMhITxnnRbalpCNi&#39;,
+ &#39;spotify:track:2uA9UIwIh80JVNblihS6gt&#39;,
+ &#39;spotify:track:63SF10lPoWA71bDYYzxfUs&#39;,
+ &#39;spotify:track:5hKQZ1Ek9ZPc2c6LSBIJN1&#39;,
+ &#39;spotify:track:22eADXu8DfOAUEDw4vU8qy&#39;,
+ &#39;spotify:track:4rr19p6NPfg8oUazZQnkS8&#39;,
+ &#39;spotify:track:2WEAKylXBPr9PJNANBSTDG&#39;,
+ &#39;spotify:track:7MtIfFyKeTnLp8ovMSORNu&#39;,
+ &#39;spotify:track:0Yqkp4ScyWSKTlm7hpnDQN&#39;,
+ &#39;spotify:track:05go6bBS3fbZbXC2p8xTfW&#39;,
+ &#39;spotify:track:7vnyJvpBh3fJb3DgEVG9Qo&#39;,
+ &#39;spotify:track:2FjKa1YG4rHkboNHsWO3iB&#39;,
+ &#39;spotify:track:08Z7Ve3H5p850qQfG9N3Of&#39;,
+ &#39;spotify:track:2xwsf9FuFINP1X4FTsqZ7Q&#39;,
+ &#39;spotify:track:6kig1UFggPUyZBCvXD3Wod&#39;,
+ &#39;spotify:track:5YX2R55h76mamgXwsvBRlH&#39;,
+ &#39;spotify:track:1pETXdNqwtgic1p4SumvRD&#39;,
+ &#39;spotify:track:57JZzPUi3vR9b9hRRtdISg&#39;,
+ &#39;spotify:track:3uMB82o0qa7erhiZBW9KQC&#39;,
+ &#39;spotify:track:4nOKwZf1XRw2gI4FGAGhXf&#39;,
+ &#39;spotify:track:3U1TuSqHIubBA10cVP7Sk6&#39;,
+ &#39;spotify:track:3xhXKRGahWzcXF8rD5gUvd&#39;,
+ &#39;spotify:track:2NORVPq8BWFa5VbQOAawz0&#39;,
+ &#39;spotify:track:1HxoNjuKUQbxDy1vqevNhu&#39;,
+ &#39;spotify:track:7yCqehT9dKACTFy7YugP0J&#39;,
+ &#39;spotify:track:0DBIL8arX0Zo6eAuxNIpik&#39;,
+ &#39;spotify:track:64o2ZoFrCnLN8rCRIP0K1I&#39;,
+ &#39;spotify:track:5vMAKJ78vhNtvbIKz4yeIY&#39;,
+ &#39;spotify:track:6zMUIb4uce1CzpbjR3vMdN&#39;,
+ &#39;spotify:track:3Ik70XpNvyJ3wV3dxPw90w&#39;,
+ &#39;spotify:track:0XoGin3sawtB2HmME0Ikn3&#39;,
+ &#39;spotify:track:0XOUTAbbOt3DJyaF1934yz&#39;,
+ &#39;spotify:track:5aA0BanaTWun8BIAAFCcxr&#39;,
+ &#39;spotify:track:65ES1qwOB577ZnTkizMXJJ&#39;,
+ &#39;spotify:track:2kpziA4mHuM7Na6La4upg1&#39;,
+ &#39;spotify:track:7025POEXvQLugcpy6cNVSq&#39;,
+ &#39;spotify:track:4nBZIQ14fOYMxJvgbvHQpJ&#39;,
+ &#39;spotify:track:2kKL5kk4On8YRSKWDgXWMX&#39;,
+ &#39;spotify:track:7FesdPPnPPE70f4Xyjv71H&#39;,
+ &#39;spotify:track:53jMQBVML1vqNhSGybHYbm&#39;,
+ &#39;spotify:track:1uSuUREEc2TBpqW64mRa4A&#39;,
+ &#39;spotify:track:17S6bmbQdsnDQUKtgexI5b&#39;,
+ &#39;spotify:track:3yZfH82ijiYuMBpYcDJo5I&#39;,
+ &#39;spotify:track:296mmTJOJ904FwHQsSBdDr&#39;,
+ &#39;spotify:track:6VhlABJh5uaZOpyyi5wute&#39;,
+ &#39;spotify:track:3tcpDYxRmUe4O3ylYXl1xM&#39;,
+ &#39;spotify:track:6XKm1z5lYIq486iWMLnSFY&#39;,
+ &#39;spotify:track:38D70EX1pTiJPrK4YVAtjG&#39;,
+ &#39;spotify:track:0fZq48okuWkpAgjsWogAJ4&#39;,
+ &#39;spotify:track:3AH9lQx7COmyQKq5SqJRrX&#39;,
+ &#39;spotify:track:1oTHteQbmJw15rPxPVXUTv&#39;,
+ &#39;spotify:track:49rnuaQOpoTeKe0PA5nKdo&#39;,
+ &#39;spotify:track:7mMlbJlXXo2mRtQ4R9sIzD&#39;,
+ &#39;spotify:track:7uzudGwu8EG5deuFD7EEJm&#39;,
+ &#39;spotify:track:2CPqh63wRVscbceKcPxwvv&#39;,
+ &#39;spotify:track:3TW48DvQ7ChwY1Yy1tkMaP&#39;,
+ &#39;spotify:track:6xxkyxprEd4B9a28yrhsyR&#39;,
+ &#39;spotify:track:07lZt2VQlkNtNTyK1qGLw0&#39;,
+ &#39;spotify:track:1xcDKZqyEg1dIgsidluiFP&#39;,
+ &#39;spotify:track:0DAmSYQW9kq9gQNDI002KP&#39;,
+ &#39;spotify:track:0z9hbAY5d0RhmvZr3DWMPK&#39;,
+ &#39;spotify:track:6qx90ZvCLa8s0UPm86DbOb&#39;,
+ &#39;spotify:track:6fXzclKMWcYFIvRPREufPf&#39;,
+ &#39;spotify:track:1LzNfuep1bnAUR9skqdHCK&#39;,
+ &#39;spotify:track:04j2YvoGqnRSTDyzRdZkqq&#39;,
+ &#39;spotify:track:61KHfpOOqUgSWpzfpufkzs&#39;,
+ &#39;spotify:track:2SZDu4esDLUISRnpYQE17b&#39;,
+ &#39;spotify:track:7nEkBczicAhAPEaAT3UbeY&#39;,
+ &#39;spotify:track:10OjtySLPWbVHJRB71MjJi&#39;,
+ &#39;spotify:track:3pfXxHoydFRfD7IBGJTQAN&#39;,
+ &#39;spotify:track:2ctM11eovXsKVkiQTaMx4t&#39;,
+ &#39;spotify:track:5NAsayJ95IyU7B9zpPSb4P&#39;,
+ &#39;spotify:track:51oVwsllGkGySCLW6inIXE&#39;,
+ &#39;spotify:track:3zjjzKg16tczCMwckGKGuH&#39;,
+ &#39;spotify:track:19BkO3i2H6TwBIiPCCdR4f&#39;,
+ &#39;spotify:track:4RkFfhPe52X9sv5iCl3ixA&#39;,
+ &#39;spotify:track:6VI93a0A7kqPK7vXPf50nL&#39;,
+ &#39;spotify:track:6U4VqEHy4n5VeiH4pQPL24&#39;,
+ &#39;spotify:track:3XvIkeomrbYnwIzLUFiYHG&#39;,
+ &#39;spotify:track:5dsGyRTXP370sgS6Cz13Vh&#39;,
+ &#39;spotify:track:3Ji3MhxkAHYs8Byc3O1Jgk&#39;,
+ &#39;spotify:track:50fCm9Wuerl1Ram0FUDEaL&#39;,
+ &#39;spotify:track:4OXqW9GmQlRgJZR519ebBZ&#39;,
+ &#39;spotify:track:1Z5L1sgdPUPfcuxsfaYzcB&#39;,
+ &#39;spotify:track:20Bq3bQWFKZA8NOodSSSfG&#39;,
+ &#39;spotify:track:7nYvUtkQMx1v80S2FH2s9J&#39;,
+ &#39;spotify:track:4eLYVYZVbaBU0nYeuWbHdh&#39;,
+ &#39;spotify:track:1x7QWWVpQdoiOGDRWuSK5l&#39;,
+ &#39;spotify:track:4PWY72AubTjoZrohQt0pWn&#39;,
+ &#39;spotify:track:2xqjlxsJpuRwNnq5iz9sGX&#39;,
+ &#39;spotify:track:376KnY4TrgBITxjlnbnmIy&#39;,
+ &#39;spotify:track:3mT1AONeTJDi1k8vH8pA2L&#39;,
+ &#39;spotify:track:0IbNasZaAuAIsA5go3TA9R&#39;,
+ &#39;spotify:track:3mogmakkKiKWOB0tVj1X9i&#39;,
+ &#39;spotify:track:2c5Isyd07hWsl7AQia2Dig&#39;,
+ &#39;spotify:track:1U3YVpWhRLQ8MLk7SK9PtZ&#39;,
+ &#39;spotify:track:1aa5vynK6KH38TANV1Pac0&#39;,
+ &#39;spotify:track:5iKoarDSV0EA1JN10Bljr5&#39;,
+ &#39;spotify:track:1dadMFSGIJATXdcNqIUTOA&#39;,
+ &#39;spotify:track:5Axpb85IKY90OUkFadiSTM&#39;,
+ &#39;spotify:track:1DThYRRQ0Hwtn1JeJNAqyK&#39;,
+ &#39;spotify:track:71x6TqO4mB9IvwCdxdT9iA&#39;,
+ &#39;spotify:track:5DOYik1z3Of1wAFfY3dYbC&#39;,
+ &#39;spotify:track:67RoNS4g0UH1HWz96fNjAu&#39;,
+ &#39;spotify:track:5Tp97LcL45G82uC6vaLvt5&#39;,
+ &#39;spotify:track:0LBtQiEVfP4ysLQ43Do8uN&#39;,
+ &#39;spotify:track:5WLpGF9jTjcdaN9idvUdFN&#39;,
+ &#39;spotify:track:7EXr7Wx6WXdr4vLNGc48xw&#39;,
+ &#39;spotify:track:0D4ZDFhwclf2FxZb5wm3qm&#39;,
+ &#39;spotify:track:2iUmqdfGZcHIhS3b9E9EWq&#39;,
+ &#39;spotify:track:49dFv4gH1SeY90FySDOwCE&#39;,
+ &#39;spotify:track:7HLTfpgbqC85BayqViMHmU&#39;,
+ &#39;spotify:track:6xANFc4ajkfCOCivvrtD7U&#39;,
+ &#39;spotify:track:516V4vS25xnGdVgkBWO6Wf&#39;,
+ &#39;spotify:track:1o9qSSbiqbQqgtFlCFixYz&#39;,
+ &#39;spotify:track:5rF35meCdTHjDL92rc5q4m&#39;,
+ &#39;spotify:track:359krpyCKcFF8SFvqWES9L&#39;,
+ &#39;spotify:track:362zcsyXMLbL7PNLhOovvm&#39;,
+ &#39;spotify:track:3PEgB3fkiojxms35ntsTgs&#39;,
+ &#39;spotify:track:3kFLioKmQO7tnGxb8OZ0Sy&#39;,
+ &#39;spotify:track:46zKgD8f2UecI18HLeUABs&#39;,
+ &#39;spotify:track:6ALzPzdLTCGceKBwwb5lfi&#39;,
+ &#39;spotify:track:3B7i9OKRRmIsSBHEbJz58Y&#39;,
+ &#39;spotify:track:5wTM2Bm8phDwHAuOsfBwhU&#39;,
+ &#39;spotify:track:5SqikUf4UzapxE4ApV5Sb6&#39;,
+ &#39;spotify:track:5fsAuyAlYenYBV07603Iea&#39;,
+ &#39;spotify:track:6TT0FMoNtq9Dn78Rq0Yldo&#39;,
+ &#39;spotify:track:6qMXubogFdMrvVMJwqATzd&#39;,
+ &#39;spotify:track:0JCS7q2sxbydawkUCVIuhK&#39;,
+ ...]</pre>
 </div>
 
 </div>
@@ -128,68 +1305,13 @@ nb_path: "index.ipynb"
 </div>
     {% endraw %}
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">path_models</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;D:/schule/diplomarbeit/models&quot;</span><span class="p">)</span>
-<span class="n">mpd_csv_file</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;D:\schule\diplomarbeit\converted_csv\mpd_slice_0-9999.csv&quot;</span>
-
-<span class="n">save</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">PosixPath</span>
-<span class="n">pathlib</span><span class="o">.</span><span class="n">PosixPath</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">WindowsPath</span>   
-<span class="n">playlist_learner</span> <span class="o">=</span> <span class="n">load_learner</span><span class="p">(</span><span class="n">path_models</span><span class="o">/</span><span class="s1">&#39;playlists_tracks_br_model_v1.pkl&#39;</span><span class="p">)</span>
-<span class="n">artist_learner</span> <span class="o">=</span> <span class="n">load_learner</span><span class="p">(</span><span class="n">path_models</span><span class="o">/</span><span class="s1">&#39;playlists_artists_br_model_v1.pkl&#39;</span><span class="p">)</span>
-<span class="n">pathlib</span><span class="o">.</span><span class="n">PosixPath</span> <span class="o">=</span> <span class="n">save</span>
-
-<span class="n">playlists</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">mpd_csv_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">low_memory</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                       <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pid&#39;</span><span class="p">,</span><span class="s1">&#39;track_uri&#39;</span><span class="p">,</span><span class="s1">&#39;rating&#39;</span><span class="p">,</span><span class="s1">&#39;playlist_name&#39;</span><span class="p">,</span><span class="s1">&#39;track_name&#39;</span><span class="p">,</span><span class="s1">&#39;artist_uri&#39;</span><span class="p">,</span><span class="s1">&#39;artist_name&#39;</span><span class="p">],</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>There you go!</p>
 
 </div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rec</span> <span class="o">=</span> <span class="n">Recommender</span><span class="p">(</span><span class="n">p_learn</span><span class="o">=</span><span class="n">playlist_learner</span><span class="p">,</span> <span class="n">a_learn</span><span class="o">=</span><span class="n">artist_learner</span><span class="p">,</span> <span class="n">playlists</span><span class="o">=</span><span class="n">playlists</span><span class="p">)</span>
-</pre></div>
-
-    </div>
 </div>
 </div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rankings</span> <span class="o">=</span> <span class="n">rec</span><span class="o">.</span><span class="n">recommend</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>
-<span class="n">rankings</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
 </div>
  
 
