@@ -89,7 +89,7 @@ First of all, we need to create an instance of the **Recommender** class:
 rec = Recommender(p_learn=playlist_learner, a_learn=artist_learner, playlists=df_tracks)
 ```
 
-Then you can use the **recommend** method to get recommendations to any playlist that your model has been trained on:
+Then you can use the **recommend** method to get recommendations for any playlist that your model has been trained on:
 
 ```python
 rankings = rec.recommend(pid=255)

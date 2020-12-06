@@ -87,11 +87,12 @@ class Recommender:
 
     def __limit_artists(self, rankings, artist_variety):
         top_track_uris = []
+        final_rankings = []
         for ranking in rankings:
-            count = sum(i_ranking.artist_uri == ranking.artist_uri for i_ranking in rankings)
+            count = sum(final_ranking.artist_uri == ranking.artist_uri for final_ranking in final_rankings)
             if(count < artist_variety):
-                top_track_uris.append(ranking.track_uri)
-        return top_track_uris
+                final_rankings.append(ranking)
+        return list([ranking.track_uri for ranking in final_rankings])
 
 # Cell
 class Ranking:
